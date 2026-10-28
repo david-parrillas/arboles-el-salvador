@@ -84,7 +84,6 @@ export default function ViverosMap({ viveros, seleccionado, onSeleccionar }: Pro
     const verde = colorTema('--color-verde', '#2f8944');
     const rosa = colorTema('--color-rosa-400', '#f0a5c2');
     const marino = colorTema('--color-marino', '#27295c');
-    const maximo = Math.max(1, ...viveros.map((v) => v.total));
 
     e.capa.removeAll();
     // El seleccionado se dibuja al final para que quede encima de los demás.
@@ -99,8 +98,8 @@ export default function ViverosMap({ viveros, seleccionado, onSeleccionar }: Pro
           symbol: {
             type: 'simple-marker',
             style: 'circle',
-            color: activo ? rosa : v.total > 0 ? verde : '#9ca3af',
-            size: (activo ? 10 : 6) + Math.sqrt(v.total / maximo) * 22,
+            color: activo ? rosa : v.especies.length > 0 ? verde : '#9ca3af',
+            size: activo ? 22 : 14,
             outline: { color: activo ? marino : '#ffffff', width: activo ? 3 : 1.5 },
           },
         }),

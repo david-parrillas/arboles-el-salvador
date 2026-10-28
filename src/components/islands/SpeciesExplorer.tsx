@@ -19,13 +19,12 @@ function SpeciesExplorer({ inicial }: Props) {
   const termino = useDeferredValue(normalizar(busqueda.trim()));
 
   const especies = datos ?? [];
-  const maximo = especies[0]?.total ?? 1;
 
   const filtradas = useMemo(
     () =>
       especies.filter(
         (e) =>
-          (!soloDisponibles || e.total > 0) &&
+          (!soloDisponibles || e.viveros > 0) &&
           (!termino ||
             normalizar(e.nombreComun).includes(termino) ||
             normalizar(e.nombreCientifico ?? '').includes(termino)),
@@ -70,12 +69,12 @@ function SpeciesExplorer({ inicial }: Props) {
               : 'border-marino/15 bg-white text-marino hover:border-marino'
           }`}
         >
-          {soloDisponibles ? '✓ Solo con existencias' : 'Todas las especies'}
+          {soloDisponibles ? '✓ Solo disponibles' : 'Todas las especies'}
         </button>
       </div>
 
       <p className="mt-4 text-sm text-marino/60" aria-live="polite">
-        {numero.format(filtradas.length)} especies {cargando && '· actualizando inventario…'}
+        {numero.format(filtradas.length)} especies {cargando && '· actualizando catálogo…'}
       </p>
 
       <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -90,25 +89,21 @@ function SpeciesExplorer({ inicial }: Props) {
               transition={{ duration: 0.3 }}
               className="flex flex-col rounded-[1.75rem] bg-white p-6 ring-1 ring-marino/10"
             >
+              <span aria-hidden="true" className={`mb-4 size-3 rounded-full ${acentos[i % acentos.length]}`} />
               <h3 className="text-xl leading-tight font-bold text-balance text-marino">{e.nombreComun}</h3>
               {e.nombreCientifico && (
                 <p className="mt-1 font-serif text-lg text-marino/60 italic">{e.nombreCientifico}</p>
               )}
               <div className="mt-auto pt-6">
-                <p className="text-4xl titulo text-marino tabular-nums">
-                  {e.total > 0 ? numero.format(e.total) : 'Agotada'}
+                <p
+                  className={`w-fit rounded-full px-3 py-1.5 text-sm font-semibold ${
+                    e.viveros > 0 ? 'bg-verde-50 text-olivo' : 'bg-marino/5 text-marino/60'
+                  }`}
+                >
+                  {e.viveros > 0
+                    ? `Disponible en ${e.viveros} ${e.viveros === 1 ? 'vivero' : 'viveros'}`
+                    : 'Sin existencias por ahora'}
                 </p>
-                <p className="mt-1 text-sm text-marino/60">
-                  {e.total > 0
-                    ? `plantas en ${e.viveros} ${e.viveros === 1 ? 'vivero' : 'viveros'}`
-                    : 'sin existencias por ahora'}
-                </p>
-                <div className="mt-4 h-2 overflow-hidden rounded-full bg-marino/10">
-                  <div
-                    className={`h-full rounded-full ${acentos[i % acentos.length]}`}
-                    style={{ width: `${Math.max(2, (e.total / maximo) * 100)}%` }}
-                  />
-                </div>
               </div>
             </motion.li>
           ))}

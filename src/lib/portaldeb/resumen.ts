@@ -1,15 +1,16 @@
 import { portaldeb } from './client';
 import type { Especie, Inventario, Vivero } from './schemas';
 
-// El inventario completo pesa ~230 KB. Se condensa aquí para que las islas
-// reciban solo lo que muestran. Cuando exista /api/public/arboles/estadisticas
-// en PortalDEB, este cálculo pasa al servidor.
+// El inventario solo se usa para saber QUÉ especies hay en cada vivero.
+// Las cantidades no se publican: no salen de esta función, así que no llegan
+// ni al HTML generado ni a las islas. Cuando PortalDEB tenga un endpoint de
+// disponibilidad sin cantidades, se reemplaza la consulta al inventario.
 
 export interface ResumenEspecie {
   id: number;
   nombreComun: string;
   nombreCientifico: string | null;
-  total: number;
+  /** En cuántos viveros está disponible (0 = sin existencias por ahora). */
   viveros: number;
 }
 
@@ -18,39 +19,31 @@ export interface ResumenVivero {
   nombre: string;
   direccion: string | null;
   coordenadas: [number, number] | null;
-  total: number;
-  especies: number;
-  destacadas: { nombre: string; cantidad: number }[];
+  /** Nombres comunes de las especies disponibles, en orden alfabético. */
+  especies: string[];
 }
 
 export interface Resumen {
   generadoEn: string;
   totales: {
-    plantas: number;
     especies: number;
     viveros: number;
-    viverosConExistencia: number;
   };
   especies: ResumenEspecie[];
   viveros: ResumenVivero[];
 }
 
+const alfabetico = new Intl.Collator('es', { sensitivity: 'base' }).compare;
+
 export function resumir(viveros: Vivero[], especies: Especie[], inventario: Inventario[]): Resumen {
   const especiesPorId = new Map(especies.map((e) => [e.id, e]));
-  const porEspecie = new Map<number, { total: number; viveros: Set<number> }>();
-  const porVivero = new Map<number, Map<number, number>>();
+  const viverosPorEspecie = new Map<number, Set<number>>();
+  const especiesPorVivero = new Map<number, Set<number>>();
 
   for (const { vivero_id, especie_id, cantidad } of inventario) {
     if (cantidad <= 0) continue;
-
-    const e = porEspecie.get(especie_id) ?? { total: 0, viveros: new Set<number>() };
-    e.total += cantidad;
-    e.viveros.add(vivero_id);
-    porEspecie.set(especie_id, e);
-
-    const v = porVivero.get(vivero_id) ?? new Map<number, number>();
-    v.set(especie_id, (v.get(especie_id) ?? 0) + cantidad);
-    porVivero.set(vivero_id, v);
+    viverosPorEspecie.set(especie_id, (viverosPorEspecie.get(especie_id) ?? new Set()).add(vivero_id));
+    especiesPorVivero.set(vivero_id, (especiesPorVivero.get(vivero_id) ?? new Set()).add(especie_id));
   }
 
   const resumenEspecies: ResumenEspecie[] = especies
@@ -58,39 +51,28 @@ export function resumir(viveros: Vivero[], especies: Especie[], inventario: Inve
       id: e.id,
       nombreComun: e.nombre_comun,
       nombreCientifico: e.nombre_cientifico,
-      total: porEspecie.get(e.id)?.total ?? 0,
-      viveros: porEspecie.get(e.id)?.viveros.size ?? 0,
+      viveros: viverosPorEspecie.get(e.id)?.size ?? 0,
     }))
-    .sort((a, b) => b.total - a.total);
+    .sort((a, b) => alfabetico(a.nombreComun, b.nombreComun));
 
   const resumenViveros: ResumenVivero[] = viveros
-    .map((v) => {
-      const stock = [...(porVivero.get(v.id) ?? new Map<number, number>())];
-      return {
-        id: v.id,
-        nombre: v.nombre,
-        direccion: v.direccion,
-        coordenadas: v.ubicacion?.coordinates ?? null,
-        total: stock.reduce((s, [, c]) => s + c, 0),
-        especies: stock.length,
-        destacadas: stock
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 5)
-          .map(([id, cantidad]) => ({
-            nombre: especiesPorId.get(id)?.nombre_comun ?? `Especie ${id}`,
-            cantidad,
-          })),
-      };
-    })
-    .sort((a, b) => b.total - a.total);
+    .map((v) => ({
+      id: v.id,
+      nombre: v.nombre,
+      direccion: v.direccion,
+      coordenadas: v.ubicacion?.coordinates ?? null,
+      especies: [...(especiesPorVivero.get(v.id) ?? [])]
+        .map((id) => especiesPorId.get(id)?.nombre_comun.split(',')[0].trim())
+        .filter((n): n is string => Boolean(n))
+        .sort(alfabetico),
+    }))
+    .sort((a, b) => alfabetico(a.nombre, b.nombre));
 
   return {
     generadoEn: new Date().toISOString(),
     totales: {
-      plantas: resumenEspecies.reduce((s, e) => s + e.total, 0),
-      especies: resumenEspecies.filter((e) => e.total > 0).length,
-      viveros: viveros.length,
-      viverosConExistencia: resumenViveros.filter((v) => v.total > 0).length,
+      especies: resumenEspecies.filter((e) => e.viveros > 0).length,
+      viveros: resumenViveros.filter((v) => v.especies.length > 0).length,
     },
     especies: resumenEspecies,
     viveros: resumenViveros,

@@ -8,8 +8,8 @@ interface Props {
 // Se resuelve en el build: es contenido decorativo y no necesita refrescarse en vivo.
 const respaldo = ['Maquilishuat', 'Cedro', 'Caoba', 'Conacaste', 'Bálsamo', 'Ceiba', 'Madrecacao', 'Guachipilín'];
 const nombres = Astro.props.especies.length
-  ? Astro.props.especies
-      .filter((e) => e.total > 0)
+  ? [...Astro.props.especies]
+      .sort((a, b) => b.viveros - a.viveros)
       .slice(0, 18)
       .map((e) => e.nombreComun.split(',')[0])
   : respaldo;

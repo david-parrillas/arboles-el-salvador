@@ -34,13 +34,13 @@ const resumen = await cargarResumenSeguro();
       <div class="mx-auto max-w-7xl px-4 sm:px-6">
         <div class="mb-12 grid gap-6 lg:grid-cols-2 lg:items-end">
           <div>
-            <p class="eyebrow text-olivo">Inventario en vivo</p>
+            <p class="eyebrow text-olivo">Catálogo en vivo</p>
             <h2 id="especies-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
               ¿Qué quieres <em class="font-serif font-normal tracking-normal text-verde">sembrar?</em>
             </h2>
           </div>
           <p class="text-lg text-marino/70">
-            Maderables, frutales y especies nativas producidas en los viveros del MARN. Las existencias se consultan
+            Maderables, frutales y especies nativas producidas en los viveros del MARN. La disponibilidad se consulta
             directamente en PortalDEB.
           </p>
         </div>
@@ -58,8 +58,8 @@ const resumen = await cargarResumenSeguro();
             </h2>
           </div>
           <p class="text-lg text-marino/70">
-            Los viveros están en áreas naturales protegidas de todo el país. El tamaño de cada punto indica cuántas
-            plantas tiene disponibles.
+            Los viveros están en áreas naturales protegidas de todo el país. Selecciona uno para ver qué especies tiene
+            disponibles.
           </p>
         </div>
         <ViverosExplorer client:visible inicial={resumen?.viveros ?? null} />

@@ -43,10 +43,11 @@ function LiveStats({ inicial, generadoEn }: Props) {
     if (enVivo) setAhora(new Date());
   }, [enVivo]);
 
-  const tarjetas = [
-    { valor: datos?.plantas, etiqueta: 'plantas listas para sembrar', acento: 'bg-verde' },
-    { valor: datos?.especies, etiqueta: 'especies con existencias', acento: 'bg-rosa-400' },
-    { valor: datos?.viverosConExistencia, etiqueta: 'viveros en todo el país', acento: 'bg-pasto' },
+  // No se publican cantidades de plantas: solo cuántas especies y viveros hay.
+  const tarjetas: { valor?: number; texto?: string; etiqueta: string; acento: string }[] = [
+    { valor: datos?.especies, etiqueta: 'especies disponibles', acento: 'bg-verde' },
+    { valor: datos?.viveros, etiqueta: 'viveros en todo el país', acento: 'bg-rosa-400' },
+    { texto: 'Gratis', etiqueta: 'para quien se comprometa a sembrar', acento: 'bg-pasto' },
   ];
 
   return (
@@ -57,7 +58,7 @@ function LiveStats({ inicial, generadoEn }: Props) {
             <span aria-hidden="true" className={`absolute inset-x-0 top-0 h-1.5 ${t.acento}`} />
             <dt className="text-sm text-marino/70">{t.etiqueta}</dt>
             <dd className="mt-2 text-5xl titulo text-marino md:text-6xl">
-              {t.valor == null ? '—' : <Contador valor={t.valor} />}
+              {t.texto ?? (t.valor == null ? '—' : <Contador valor={t.valor} />)}
             </dd>
           </div>
         ))}

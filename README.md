@@ -47,6 +47,6 @@ pnpm preview    # sirve dist/
 ## Pendiente en PortalDEB
 
 - Módulo de jornadas/eventos → hoy `src/data/eventos.ts` tiene **datos de ejemplo**.
-- Endpoint de estadísticas agregadas (evita descargar el inventario completo, ~230 KB).
+- Endpoint público de disponibilidad (especies por vivero) **sin cantidades**, y restringir `/api/viveros/inventario`, que hoy expone las cantidades a cualquiera.
 - Formulario público de voluntarios (`enlaces.voluntarios` en `src/config/site.ts`).
 - Limitar `allowed_origins` en `config/cors.php` al dominio de este sitio.

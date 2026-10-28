@@ -2,7 +2,7 @@ import { useDeferredValue, useMemo, useState } from 'react';
 import { enlaces } from '../../config/site';
 import { useResumen, withQuery } from '../../lib/portaldeb/queries';
 import type { ResumenVivero } from '../../lib/portaldeb/resumen';
-import { normalizar, numero } from '../../lib/texto';
+import { normalizar } from '../../lib/texto';
 import ViverosMap from './ViverosMap';
 
 interface Props {
@@ -57,23 +57,22 @@ function ViverosExplorer({ inicial }: Props) {
                     <span
                       className={`shrink-0 text-sm tabular-nums ${activo ? 'text-marino/70' : 'font-semibold text-olivo'}`}
                     >
-                      {v.total > 0 ? numero.format(v.total) : '—'}
+                      {v.especies.length > 0 ? `${v.especies.length} especies` : 'Sin existencias'}
                     </span>
                   </span>
                   {activo && (
                     <span className="mt-3 block">
                       {v.direccion && <span className="block text-sm text-marino/75">{v.direccion}</span>}
                       <span className="mt-3 flex flex-wrap gap-1.5">
-                        {v.destacadas.map((d) => (
-                          <span key={d.nombre} className="rounded-full bg-marino/10 px-3 py-1 text-xs font-semibold">
-                            {d.nombre.split(',')[0]} · {numero.format(d.cantidad)}
+                        {v.especies.map((nombre) => (
+                          <span key={nombre} className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold">
+                            {nombre}
                           </span>
                         ))}
                       </span>
-                      <span className="mt-3 block text-xs text-marino/70">
-                        {v.especies} especies disponibles
-                        {!v.coordenadas && ' · sin ubicación en el mapa'}
-                      </span>
+                      {!v.coordenadas && (
+                        <span className="mt-3 block text-xs text-marino/70">Sin ubicación en el mapa</span>
+                      )}
                     </span>
                   )}
                 </button>
