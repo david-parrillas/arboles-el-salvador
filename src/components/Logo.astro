@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import logoClaro from '../assets/logo/claro.png';
+import logoClaroSinLema from '../assets/logo/claro-sin-lema.png';
+import logoOriginal from '../assets/logo/original.png';
+import logoOriginalSinLema from '../assets/logo/original-sin-lema.png';
+
+// "claro" es el logo oficial con el texto azul marino recoloreado para fondos oscuros.
+interface Props {
+  variante?: 'claro' | 'original';
+  lema?: boolean;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const { variante = 'claro', lema = false, class: className = '', loading = 'lazy' } = Astro.props;
+
+const fuentes = {
+  claro: lema ? logoClaro : logoClaroSinLema,
+  original: lema ? logoOriginal : logoOriginalSinLema,
+};
+---
+
+<Image
+  src={fuentes[variante]}
+  alt={lema ? 'Árboles para El Salvador. Un pulmón para el futuro' : 'Árboles para El Salvador'}
+  widths={[160, 320, 464]}
+  sizes="(min-width: 768px) 240px, 160px"
+  class:list={['h-auto w-auto', className]}
+  loading={loading}
+/>

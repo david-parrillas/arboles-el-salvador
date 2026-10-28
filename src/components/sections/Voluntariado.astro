@@ -1,0 +1,53 @@
+---
+import { enlaces } from '../../config/site';
+---
+
+<section id="voluntariado" class="bg-crema py-28" aria-labelledby="voluntariado-titulo">
+  <div class="mx-auto grid max-w-7xl gap-4 px-4 sm:px-6 lg:grid-cols-[1.4fr_1fr]">
+    <article class="relative overflow-hidden rounded-[2.5rem] bg-hoja-700 p-8 text-white md:p-14">
+      <svg
+        viewBox="0 0 200 200"
+        class="absolute -right-16 -bottom-16 size-80 text-hoja"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M100 10c-30 30-50 60-50 90a50 50 0 0 0 100 0c0-30-20-60-50-90Z"></path>
+      </svg>
+      <p class="eyebrow relative text-lima">Únete a reforestar</p>
+      <h2 id="voluntariado-titulo" class="titulo relative mt-5 text-[clamp(2.8rem,6vw,5.5rem)]">
+        Pon tus manos <span class="block font-serif font-normal tracking-normal text-lima italic">en la tierra.</span>
+      </h2>
+      <p class="relative mt-6 max-w-lg text-lg text-white/85">
+        Inscríbete como voluntario y te avisaremos de las jornadas de siembra cerca de ti. Escuelas, empresas y grupos
+        organizados también pueden sumarse.
+      </p>
+      <a
+        href={enlaces.voluntarios}
+        class="relative mt-10 inline-flex items-center gap-3 rounded-full bg-lima py-4 pr-4 pl-7 text-lg font-bold text-marino transition hover:bg-lima-300"
+      >
+        Quiero ser voluntario
+        <span class="grid size-9 place-items-center rounded-full bg-marino text-lima" aria-hidden="true">
+          →
+        </span>
+      </a>
+    </article>
+
+    <article class="flex flex-col rounded-[2.5rem] bg-sol p-8 md:p-12">
+      <p class="eyebrow">Recurso descargable</p>
+      <h2 class="titulo mt-5 text-5xl md:text-6xl">Guía para la reforestación</h2>
+      <p class="mt-5 text-marino/75">
+        Cómo elegir la especie, preparar el terreno, sembrar y dar mantenimiento para que tu árbol sobreviva.
+      </p>
+      <a
+        href={enlaces.guiaReforestacion}
+        download
+        class="mt-auto inline-flex items-center justify-between gap-3 rounded-3xl border-2 border-marino px-6 py-5 font-bold transition hover:bg-marino hover:text-sol"
+      >
+        <span>Descargar PDF</span>
+        <span aria-hidden="true" class="text-2xl">
+          ↓
+        </span>
+      </a>
+    </article>
+  </div>
+</section>

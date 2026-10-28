@@ -1,0 +1,159 @@
+---
+import { enlaces } from '../../config/site';
+import type { Resumen } from '../../lib/portaldeb/resumen';
+import LiveStats from '../islands/LiveStats';
+
+interface Props {
+  resumen: Resumen | null;
+}
+const { resumen } = Astro.props;
+
+// Siluetas de árboles sobre la colina frontal (posiciones fijas para que el build sea estable).
+const arboles = [
+  [40, 352, 16],
+  [78, 344, 22],
+  [120, 350, 14],
+  [300, 338, 18],
+  [338, 332, 26],
+  [380, 340, 15],
+  [610, 346, 20],
+  [650, 340, 28],
+  [700, 348, 16],
+  [930, 330, 18],
+  [968, 324, 24],
+  [1010, 332, 14],
+  [1210, 322, 20],
+  [1250, 316, 27],
+  [1292, 324, 17],
+  [1400, 318, 22],
+];
+
+const petalos = [
+  { top: '18%', left: '8%', delay: '0s', size: 'size-3' },
+  { top: '30%', left: '46%', delay: '-3s', size: 'size-2' },
+  { top: '12%', left: '62%', delay: '-6s', size: 'size-4' },
+  { top: '48%', left: '88%', delay: '-1.5s', size: 'size-3' },
+  { top: '58%', left: '20%', delay: '-4.5s', size: 'size-2' },
+  { top: '24%', left: '92%', delay: '-7s', size: 'size-2' },
+];
+---
+
+<section
+  class="relative isolate overflow-hidden bg-gradient-to-b from-crema via-crema to-hoja-100 pt-32 pb-10 sm:pt-40"
+  aria-labelledby="hero-titulo"
+>
+  <!-- Paisaje: sol tras el volcán y capas de montañas en los verdes del logo -->
+  <svg
+    class="pointer-events-none absolute bottom-0 left-1/2 -z-10 h-auto w-[max(100%,1100px)] -translate-x-1/2"
+    viewBox="0 0 1440 400"
+    aria-hidden="true"
+  >
+    <defs>
+      <radialGradient id="sol" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--color-lima)"></stop>
+        <stop offset="50%" stop-color="var(--color-rosa)"></stop>
+        <stop offset="100%" stop-color="var(--color-rosa)" stop-opacity="0"></stop>
+      </radialGradient>
+    </defs>
+    <circle cx="1075" cy="95" r="150" fill="url(#sol)"></circle>
+    <path
+      d="M0 300 L180 236 L320 262 L520 128 L590 116 L700 204 L860 176 L1040 66 L1110 60 L1250 196 L1440 150 V400 H0Z"
+      fill="var(--color-salvia-200)"
+    ></path>
+    <path
+      d="M0 340 L240 282 L420 302 L640 196 L700 192 L900 300 L1100 262 L1300 300 L1440 278 V400 H0Z"
+      fill="var(--color-salvia-300)"
+    ></path>
+    <path d="M0 400 V356 Q220 314 440 344 T880 334 T1440 320 V400Z" fill="var(--color-salvia)"></path>
+    {arboles.map(([x, y, r]) => (
+      <g fill="var(--color-hoja)">
+        <circle cx={x} cy={y - r} r={r} />
+        <rect x={x - 2} y={y - r} width="4" height={r + 8} fill="var(--color-hoja-700)" />
+      </g>
+    ))}
+  </svg>
+
+  {petalos.map((p) => (
+    <span
+      aria-hidden="true"
+      class:list={['animate-flotar pointer-events-none absolute -z-10 rounded-[70%_0] bg-rosa-400/80', p.size]}
+      style={`top:${p.top};left:${p.left};animation-delay:${p.delay}`}
+    />
+  ))}
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="relative">
+      <p class="eyebrow inline-flex items-center gap-2 rounded-full border border-marino/15 bg-white/60 px-4 py-2 text-marino/75">
+        <span class="size-1.5 rounded-full bg-hoja"></span>
+        Programa nacional de reforestación
+      </p>
+
+      <h1 id="hero-titulo" class="titulo mt-8 max-w-5xl text-[clamp(3.4rem,9vw,8.5rem)] text-balance">
+        Sembremos{' '}
+        <span class="block">
+          un <em class="font-serif font-normal tracking-normal text-hoja-700">pulmón</em>
+        </span>
+        <span class="block">
+          <span class="box-decoration-clone bg-[linear-gradient(transparent_58%,var(--color-lima)_58%,var(--color-lima)_92%,transparent_92%)] px-1">
+            para el futuro.
+          </span>
+        </span>
+      </h1>
+
+      <div class="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <p class="max-w-xl text-lg leading-relaxed text-marino/75 md:text-xl">
+          Los viveros del Ministerio de Medio Ambiente entregan árboles <strong class="text-marino">sin costo</strong> a
+          personas, escuelas, comunidades y empresas que se comprometen a sembrarlos y cuidarlos.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href={enlaces.solicitudArboles}
+            class="group inline-flex items-center gap-3 rounded-full bg-hoja-700 py-4 pr-4 pl-7 text-lg font-bold text-white transition hover:bg-hoja-800"
+          >
+            Solicita tus árboles
+            <span
+              class="grid size-9 place-items-center rounded-full bg-lima text-marino transition group-hover:rotate-45"
+              aria-hidden="true"
+            >
+              ↗
+            </span>
+          </a>
+          <a
+            href="#especies"
+            class="inline-flex items-center rounded-full border-2 border-marino/20 bg-white/50 px-7 py-4 text-lg font-semibold transition hover:border-marino"
+          >
+            Ver especies
+          </a>
+        </div>
+      </div>
+
+      <!-- Sello giratorio -->
+      <a
+        href={enlaces.solicitudArboles}
+        class="group absolute top-0 right-0 hidden size-40 lg:block xl:size-44"
+        aria-label="Solicita tus árboles, es gratis"
+      >
+        <svg viewBox="0 0 200 200" class="animate-girar size-full" aria-hidden="true">
+          <defs>
+            <path id="circulo" d="M100 100 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0"></path>
+          </defs>
+          <text class="fill-marino text-[15px] font-bold uppercase">
+            <textPath href="#circulo" textLength="486" lengthAdjust="spacing">
+              Es gratis ✺ Siembra ✺ Cuida ✺ Comparte ✺
+            </textPath>
+          </text>
+        </svg>
+        <span
+          class="absolute inset-0 m-auto grid size-16 place-items-center rounded-full bg-rosa text-3xl text-marino transition group-hover:scale-110"
+          aria-hidden="true"
+        >
+          ✿
+        </span>
+      </a>
+    </div>
+
+    <div class="mt-16 sm:mt-24">
+      <LiveStats client:load inicial={resumen?.totales ?? null} generadoEn={resumen?.generadoEn ?? null} />
+    </div>
+  </div>
+</section>

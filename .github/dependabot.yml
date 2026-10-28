@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      astro:
+        patterns: ['astro', '@astrojs/*']
+      react:
+        patterns: ['react', 'react-dom', '@types/react*']
+      tailwind:
+        patterns: ['tailwindcss', '@tailwindcss/*', 'prettier-plugin-tailwindcss']
+    ignore:
+      # Debe coincidir con la versión de PortalDEB; se actualiza a mano junto con el Portal.
+      - dependency-name: '@arcgis/core'
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

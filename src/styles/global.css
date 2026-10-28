@@ -1,0 +1,97 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/bricolage-grotesque';
+@import '@fontsource/instrument-serif/400-italic.css';
+
+@theme {
+  --font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+
+  /* Colores tomados del logo oficial + rosado suave de la flor de maquilishuat */
+  --color-marino: #27295c;
+  --color-marino-700: #33366f;
+  --color-hoja: #47ad4c;
+  --color-hoja-700: #2b7a38;
+  --color-hoja-800: #23652f;
+  --color-hoja-100: #e9f3e4;
+  --color-salvia: #63ae76;
+  --color-salvia-300: #a9d3b0;
+  --color-salvia-200: #cfe5d3;
+  --color-lima: #f0ff5f;
+  --color-lima-300: #f6ff9e;
+  --color-rosa: #f8c8da;
+  --color-rosa-400: #f0a5c2;
+  --color-rosa-100: #fdeef4;
+  --color-sol: #ffd166;
+  --color-crema: #faf7ef;
+  --color-crema-200: #f3efe3;
+
+  --animate-marquee: marquee 45s linear infinite;
+  --animate-girar: girar 18s linear infinite;
+  --animate-flotar: flotar 9s ease-in-out infinite;
+  --animate-pulso: pulso 2s ease-out infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes girar {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes flotar {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    50% {
+      transform: translate3d(12px, -28px, 0) rotate(40deg);
+    }
+  }
+  @keyframes pulso {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-hoja) 60%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 10px transparent;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+  body {
+    overflow-x: clip;
+    @apply bg-crema font-sans text-marino antialiased;
+    font-optical-sizing: auto;
+  }
+  ::selection {
+    @apply bg-lima text-marino;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-4 outline-hoja-700;
+  }
+}
+
+@utility titulo {
+  font-variation-settings: 'wdth' 85;
+  @apply leading-[0.88] font-extrabold tracking-[-0.035em];
+}
+
+@utility eyebrow {
+  @apply text-xs font-semibold tracking-[0.25em] uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

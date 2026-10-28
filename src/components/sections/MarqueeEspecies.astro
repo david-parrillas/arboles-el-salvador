@@ -1,0 +1,31 @@
+---
+import type { ResumenEspecie } from '../../lib/portaldeb/resumen';
+
+interface Props {
+  especies: ResumenEspecie[];
+}
+
+// Se resuelve en el build: es contenido decorativo y no necesita refrescarse en vivo.
+const respaldo = ['Maquilishuat', 'Cedro', 'Caoba', 'Conacaste', 'Bálsamo', 'Ceiba', 'Madrecacao', 'Guachipilín'];
+const nombres = Astro.props.especies.length
+  ? Astro.props.especies
+      .filter((e) => e.total > 0)
+      .slice(0, 18)
+      .map((e) => e.nombreComun.split(',')[0])
+  : respaldo;
+---
+
+<div class="relative -rotate-2 overflow-hidden border-y-2 border-marino bg-lima py-5 text-marino" aria-hidden="true">
+  <div class="animate-marquee flex w-max">
+    {[0, 1].map(() => (
+      <ul class="flex shrink-0 items-center">
+        {nombres.map((n) => (
+          <li class="titulo flex items-center gap-8 px-4 text-4xl whitespace-nowrap md:text-6xl">
+            {n}
+            <span class="text-hoja">✺</span>
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>
