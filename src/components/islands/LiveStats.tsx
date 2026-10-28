@@ -69,12 +69,14 @@ function LiveStats({ inicial, generadoEn }: Props) {
           className={`size-2 rounded-full ${enVivo ? 'animate-pulso bg-verde' : error ? 'bg-pasto' : 'bg-marino/30'}`}
         />
         {enVivo && ahora
-          ? `En vivo desde PortalDEB · ${hora.format(ahora)}`
+          ? `Actualizado: ${hora.format(ahora)}`
           : error
-            ? 'PortalDEB no respondió; mostrando datos de la última publicación'
+            ? generadoEn
+              ? `Datos al ${hora.format(new Date(generadoEn))}`
+              : 'Información no disponible por el momento'
             : generadoEn
-              ? `Datos publicados el ${hora.format(new Date(generadoEn))} · actualizando…`
-              : 'Conectando con PortalDEB…'}
+              ? `Datos al ${hora.format(new Date(generadoEn))} · actualizando…`
+              : 'Actualizando…'}
       </p>
     </div>
   );
