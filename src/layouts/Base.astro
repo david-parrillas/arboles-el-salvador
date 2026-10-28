@@ -1,4 +1,5 @@
 ---
+import { esPrototipo, ruta } from '../config/site';
 import '../styles/global.css';
 
 interface Props {
@@ -19,7 +20,8 @@ const { title, description } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={ruta('favicon.svg')} />
+    {esPrototipo && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <title>{title}</title>
   </head>
@@ -31,5 +33,10 @@ const { title, description } = Astro.props;
       Saltar al contenido
     </a>
     <slot />
+    {esPrototipo && (
+      <p class="pointer-events-none fixed bottom-4 left-4 z-50 rounded-full bg-sol px-4 py-2 text-xs font-bold text-marino shadow-lg">
+        Prototipo · no es el sitio oficial
+      </p>
+    )}
   </body>
 </html>

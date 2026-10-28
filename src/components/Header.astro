@@ -1,11 +1,11 @@
 ---
-import { enlaces, navegacion } from '../config/site';
+import { enlaces, navegacion, ruta } from '../config/site';
 import Logo from './Logo.astro';
 ---
 
 <header class="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
   <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-full border border-marino/10 bg-white/80 py-2.5 shadow-[0_8px_30px_-12px_rgb(39_41_92/0.25)] pr-2.5 pl-6 backdrop-blur-xl">
-    <a href="/" class="shrink-0" aria-label="Inicio">
+    <a href={ruta()} class="shrink-0" aria-label="Inicio">
       <!-- Las hojas ocupan el 42 % superior: se sube la imagen para centrar el texto con el menú. -->
       <Logo variante="original" class="h-9 -translate-y-[20%] sm:h-10" loading="eager" />
     </a>
