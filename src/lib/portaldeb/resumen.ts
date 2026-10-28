@@ -1,10 +1,11 @@
-import { portaldeb } from './client';
+import { portaldeb, PortalDebError } from './client';
 import type { Especie, Inventario, Vivero } from './schemas';
 
-// El inventario solo se usa para saber QUÉ especies hay en cada vivero.
-// Las cantidades no se publican: no salen de esta función, así que no llegan
-// ni al HTML generado ni a las islas. Cuando PortalDEB tenga un endpoint de
-// disponibilidad sin cantidades, se reemplaza la consulta al inventario.
+// Fuente principal: GET /api/public/arboles/resumen, que ya viene resumido y sin
+// cantidades. Mientras ese endpoint no esté desplegado (404), se arma el mismo
+// resumen con las 3 rutas anteriores; resumir() usa el inventario solo para saber
+// QUÉ especies hay en cada vivero y las cantidades no salen de esa función.
+// TODO: quitar el respaldo cuando el endpoint esté en producción.
 
 export interface ResumenEspecie {
   id: number;
@@ -80,6 +81,11 @@ export function resumir(viveros: Vivero[], especies: Especie[], inventario: Inve
 }
 
 export async function cargarResumen(): Promise<Resumen> {
+  try {
+    return await portaldeb.resumen();
+  } catch (error) {
+    if (!(error instanceof PortalDebError && error.status === 404)) throw error;
+  }
   const [viveros, especies, inventario] = await Promise.all([
     portaldeb.viveros(),
     portaldeb.especiesDisponibles(),

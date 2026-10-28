@@ -34,6 +34,29 @@ export const departamentoSchema = z.object({
   code: z.string(),
 });
 
+// GET /api/public/arboles/resumen: disponibilidad ya resumida y sin cantidades.
+export const resumenSchema = z.object({
+  generadoEn: z.string(),
+  totales: z.object({ especies: z.number(), viveros: z.number() }),
+  especies: z.array(
+    z.object({
+      id: z.number(),
+      nombreComun: z.string(),
+      nombreCientifico: z.string().nullable(),
+      viveros: z.number(),
+    }),
+  ),
+  viveros: z.array(
+    z.object({
+      id: z.number(),
+      nombre: z.string(),
+      direccion: z.string().nullable(),
+      coordenadas: z.tuple([z.number(), z.number()]).nullable(),
+      especies: z.array(z.string()),
+    }),
+  ),
+});
+
 export type Vivero = z.infer<typeof viveroSchema>;
 export type Especie = z.infer<typeof especieSchema>;
 export type Inventario = z.infer<typeof inventarioSchema>;

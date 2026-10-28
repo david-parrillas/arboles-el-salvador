@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { PORTALDEB_URL } from '../../config/site';
-import { departamentoSchema, especieSchema, inventarioSchema, viveroSchema } from './schemas';
+import { departamentoSchema, especieSchema, inventarioSchema, resumenSchema, viveroSchema } from './schemas';
 
 export class PortalDebError extends Error {
   constructor(
@@ -23,6 +23,7 @@ async function get<S extends z.ZodType>(path: string, schema: S): Promise<z.infe
 }
 
 export const portaldeb = {
+  resumen: () => get('/public/arboles/resumen', resumenSchema),
   viveros: () => get('/viveros/viveros?withLocation=1', z.array(viveroSchema)),
   especiesDisponibles: () => get('/viveros/especies/disponibles?visibility=public', z.array(especieSchema)),
   inventario: () => get('/viveros/inventario', z.array(inventarioSchema)),
