@@ -9,11 +9,12 @@ import MarqueeEspecies from '../components/sections/MarqueeEspecies.astro';
 import Proyecto from '../components/sections/Proyecto.astro';
 import Voluntariado from '../components/sections/Voluntariado.astro';
 import Base from '../layouts/Base.astro';
+import { cargarJornadasSeguro } from '../lib/portaldeb/jornadas';
 import { cargarResumenSeguro } from '../lib/portaldeb/resumen';
 
 // Nivel 1: datos de PortalDEB al compilar (SEO y respaldo si la API no responde).
 // Nivel 2: las islas los refrescan en el navegador con TanStack Query.
-const resumen = await cargarResumenSeguro();
+const [resumen, jornadas] = await Promise.all([cargarResumenSeguro(), cargarJornadasSeguro()]);
 ---
 
 <Base
@@ -66,7 +67,7 @@ const resumen = await cargarResumenSeguro();
       </div>
     </section>
 
-    <Calendario />
+    <Calendario jornadas={jornadas} />
     <Voluntariado />
   </main>
   <Footer />

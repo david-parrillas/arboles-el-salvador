@@ -1,65 +1,21 @@
 ---
-import { eventosEjemplo } from '../../data/eventos';
+import JornadasList from '../islands/JornadasList';
+import type { Jornadas } from '../../lib/portaldeb/jornadas';
 
-const dia = new Intl.DateTimeFormat('es-SV', { day: '2-digit', timeZone: 'America/El_Salvador' });
-const mes = new Intl.DateTimeFormat('es-SV', { month: 'short', timeZone: 'America/El_Salvador' });
-const hora = new Intl.DateTimeFormat('es-SV', { hour: 'numeric', minute: '2-digit', timeZone: 'America/El_Salvador' });
+interface Props {
+  jornadas: Jornadas | null;
+}
 
-const colorTipo = {
-  Jornada: 'bg-lima text-marino',
-  Taller: 'bg-pasto text-marino',
-  Entrega: 'bg-verde-50 text-olivo',
-} as const;
+const { jornadas } = Astro.props;
 ---
 
 <section id="calendario" class="bg-white py-28" aria-labelledby="calendario-titulo">
   <div class="mx-auto max-w-7xl px-4 sm:px-6">
-    <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-      <div>
-        <p class="eyebrow text-olivo">Calendario</p>
-        <h2 id="calendario-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
-          Próximas <em class="font-serif font-normal tracking-normal text-verde">jornadas</em>
-        </h2>
-      </div>
-      <p class="max-w-sm rounded-2xl border-2 border-dashed border-marino/20 px-4 py-3 text-sm text-marino/75">
-        <strong>Datos de ejemplo.</strong> Pronto publicaremos aquí las jornadas reales.
-      </p>
-    </div>
+    <p class="eyebrow text-olivo">Calendario</p>
+    <h2 id="calendario-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
+      Próximas <em class="font-serif font-normal tracking-normal text-verde">jornadas</em>
+    </h2>
 
-    <ul class="mt-14 divide-y divide-marino/10 border-y border-marino/10">
-      {eventosEjemplo.map((e) => {
-        const fecha = new Date(e.fecha);
-        const lleno = e.inscritos >= e.cupos * 0.95;
-        return (
-          <li class="group grid grid-cols-[auto_1fr] items-center gap-x-6 gap-y-4 py-8 md:grid-cols-[8rem_1fr_auto] md:gap-x-10">
-            <div class="grid size-24 place-content-center rounded-3xl bg-rosa text-center transition group-hover:-rotate-3 md:size-32">
-              <p class="titulo text-5xl md:text-6xl">{dia.format(fecha)}</p>
-              <p class="eyebrow mt-1">{mes.format(fecha).replace('.', '')}</p>
-            </div>
-            <div>
-              <span class:list={['eyebrow rounded-full px-3 py-1', colorTipo[e.tipo]]}>{e.tipo}</span>
-              <h3 class="titulo mt-3 text-3xl transition group-hover:translate-x-2 md:text-4xl">{e.titulo}</h3>
-              <p class="mt-2 text-marino/75">
-                {e.lugar}, {e.departamento} · {hora.format(fecha)}
-              </p>
-            </div>
-            <div class="col-span-2 md:col-span-1 md:w-56">
-              <div class="flex justify-between text-sm font-semibold">
-                <span>{lleno ? '¡Últimos cupos!' : 'Cupos'}</span>
-                <span class="tabular-nums">
-                  {e.inscritos}/{e.cupos}
-                </span>
-              </div>
-              <div class="mt-2 h-3 overflow-hidden rounded-full bg-verde-50">
-                <div
-                  class="h-full rounded-full bg-olivo"
-                  style={`width:${Math.min(100, (e.inscritos / e.cupos) * 100)}%`}
-                />
-              </div>
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+    <JornadasList client:visible inicial={jornadas} />
   </div>
 </section>

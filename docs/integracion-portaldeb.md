@@ -40,7 +40,7 @@ primera coma, orden alfabético y sin viveros eliminados. Caché de 10 min
 (`Cache::remember` + `Cache-Control: public, max-age=600`), `throttle:30,1`. Pesa ~40 KB
 frente a los ~230 KB del inventario.
 
-- **PortalDEB:** rama local `feat/viveros-resumen-publico-arboles` (commit `d2799eea`, desde
+- **PortalDEB:** rama local `feat/sitio-arboles-el-salvador` (commit `d2799eea`, desde
   `develop`), sin push ni PR todavía por la migración. Archivos:
   `ResumenPublicoArbolesService`, `ResumenArbolesResource`, `ResumenPublicoArbolesController`,
   `routes/api/public.php` y `tests/Feature/Viveros/ResumenPublicoArbolesTest.php`. Se borró
@@ -57,7 +57,7 @@ frente a los ~230 KB del inventario.
    también muestran `cantidad` sin login; esas sí las usa el Portal, así que hay que
    ponerlas detrás de autenticación sin romper esas pantallas.
 
-### 2. Módulo de jornadas de reforestación (módulo nuevo)
+### 2. Módulo de jornadas de reforestación — ✅ hecho (sin desplegar)
 
 Hoy el calendario del sitio usa datos de ejemplo (`src/data/eventos.ts`). Se crea un
 **módulo nuevo** en PortalDEB (según CONVENTIONS: tablas con prefijo del módulo,
@@ -87,24 +87,36 @@ Texto predeterminado (respetar saltos de párrafo):
 🌎La participación en estas acciones demuestra el compromiso con la sostenibilidad y el cuidado de los recursos naturales, generando beneficios que perduran en el tiempo.
 ```
 
-**Endpoint público:** `GET /api/public/arboles/jornadas` → jornadas futuras o en curso
-(fin ≥ ahora), ordenadas por inicio, vía API Resource + `Cache::remember`:
+**Hecho en PortalDEB:** commit `ddf6b305` en la misma rama `feat/sitio-arboles-el-salvador`.
+Módulo `reforestacion` (tablas `reforestacion_jornadas` y `reforestacion_jornada_anp`,
+permisos, CRUD en el Portal). Texto predeterminado en `config/reforestacion.php`; fechas
+guardadas en UTC y publicadas en America/El_Salvador.
+
+**Contrato final:** `GET /api/public/arboles/jornadas` → arreglo plano (sin envoltorio
+`data`) con las jornadas futuras o en curso, cacheado:
 
 ```ts
 {
   id: number;
+  titulo: string; // obligatorio
   inicio: string; // ISO 8601 con zona, ej. "2026-11-08T07:30:00-06:00"
   fin: string; // ISO 8601 con zona
   // ANP; coordenadas en [lng, lat]
   lugares: Array<{ id: number; nombre: string; departamento: string | null; coordenadas: [number, number] | null }>;
   descripcion: string; // texto plano con saltos de línea; el sitio no interpreta HTML
 }
+[];
 ```
 
-**Por definir con el usuario** (no inventar): si la jornada lleva título; si hay estado
-borrador/publicada o se publica al guardar; si hay cupos/inscripción; si se puede
-cancelar una jornada y cómo se muestra. El calendario del sitio hoy muestra título,
-tipo (Jornada/Taller/Entrega) y cupos de ejemplo; se ajustará a lo que se decida.
+- Sin tipo, cupos ni inscripción.
+- No existe estado "cancelada": una jornada cancelada simplemente desaparece de la API.
+- `departamento` y `coordenadas` pueden venir `null`.
+
+**Sitio:** el calendario ya consume este endpoint (isla `JornadasList`, datos en el build y
+refresco en el navegador). Muestra título, rango de fecha y hora, ANP con departamento y la
+descripción desplegable; oculta en el navegador las jornadas que ya terminaron. Si el
+endpoint responde 404 muestra `src/data/jornadas-ejemplo.ts` con el aviso "Datos de
+ejemplo" (TODO: quitar ese respaldo después del despliegue).
 
 ### 3. Formulario público de voluntariado
 
@@ -123,5 +135,5 @@ formulario público de solicitud de árboles (Turnstile, throttle).
 - Dentro de la red MARN, `portaldeb.marn.gob.sv` resuelve a IP privada (192.168.6.137) y
   Chrome pide permiso de "red local" en el sitio. Fuera de la red no pasa. Solución de
   infraestructura: DNS dividido o servir la API bajo el dominio del sitio.
-- Cuando exista el endpoint de jornadas, el calendario del sitio pasa de `eventosEjemplo`
-  a la API (schema Zod en `schemas.ts`, datos en el build y refresco en una isla).
+- Después del despliegue, en el sitio: quitar los respaldos por 404 de `cargarResumen()` y
+  `cargarJornadas()` y borrar `src/data/jornadas-ejemplo.ts`.

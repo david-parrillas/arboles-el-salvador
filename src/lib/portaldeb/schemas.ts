@@ -57,7 +57,25 @@ export const resumenSchema = z.object({
   ),
 });
 
+// GET /api/public/arboles/jornadas: jornadas futuras o en curso (las canceladas no vienen).
+export const jornadaSchema = z.object({
+  id: z.number(),
+  titulo: z.string(),
+  inicio: z.string(), // ISO 8601 con zona
+  fin: z.string(),
+  lugares: z.array(
+    z.object({
+      id: z.number(),
+      nombre: z.string(),
+      departamento: z.string().nullable(),
+      coordenadas: z.tuple([z.number(), z.number()]).nullable(),
+    }),
+  ),
+  descripcion: z.string(),
+});
+
 export type Vivero = z.infer<typeof viveroSchema>;
 export type Especie = z.infer<typeof especieSchema>;
 export type Inventario = z.infer<typeof inventarioSchema>;
+export type Jornada = z.infer<typeof jornadaSchema>;
 export type Departamento = z.infer<typeof departamentoSchema>;

@@ -3,7 +3,9 @@
 @import '@fontsource/instrument-serif/400-italic.css';
 
 @theme {
-  --font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Noto Color Emoji';
   --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
 
   /* Línea gráfica oficial de Árboles para El Salvador:
