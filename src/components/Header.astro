@@ -1,0 +1,62 @@
+---
+import { enlaces, navegacion } from '../config/site';
+import Logo from './Logo.astro';
+---
+
+<header class="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
+  <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-full border border-marino/10 bg-white/80 py-2.5 shadow-[0_8px_30px_-12px_rgb(39_41_92/0.25)] pr-2.5 pl-6 backdrop-blur-xl">
+    <a href="/" class="shrink-0" aria-label="Inicio">
+      <!-- Las hojas ocupan el 42 % superior: se sube la imagen para centrar el texto con el menú. -->
+      <Logo variante="original" class="h-9 -translate-y-[20%] sm:h-10" loading="eager" />
+    </a>
+
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex items-center gap-1 text-sm font-medium">
+        {navegacion.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="rounded-full px-4 py-2 text-marino/75 transition hover:bg-hoja-100 hover:text-marino"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={enlaces.solicitudArboles}
+        class="group inline-flex items-center gap-2 rounded-full bg-hoja-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-hoja-800 sm:px-5"
+      >
+        <span class="hidden sm:inline">Solicita tus árboles</span>
+        <span class="sm:hidden">Solicitar</span>
+        <span aria-hidden="true" class="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+          ↗
+        </span>
+      </a>
+
+      <details class="group relative lg:hidden">
+        <summary
+          class="flex size-10 cursor-pointer list-none items-center justify-center rounded-full bg-hoja-100 [&::-webkit-details-marker]:hidden"
+          aria-label="Abrir menú"
+        >
+          <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h10" class="group-open:hidden"></path>
+            <path d="M6 6l12 12M18 6 6 18" class="hidden group-open:block"></path>
+          </svg>
+        </summary>
+        <ul class="absolute top-14 right-0 w-56 rounded-3xl border border-marino/10 bg-white p-2 text-base shadow-2xl">
+          {navegacion.map((item) => (
+            <li>
+              <a href={item.href} class="block rounded-2xl px-4 py-3 hover:bg-hoja-100">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>

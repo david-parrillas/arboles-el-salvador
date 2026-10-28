@@ -1,0 +1,73 @@
+---
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import SpeciesExplorer from '../components/islands/SpeciesExplorer';
+import ViverosExplorer from '../components/islands/ViverosExplorer';
+import Calendario from '../components/sections/Calendario.astro';
+import Hero from '../components/sections/Hero.astro';
+import MarqueeEspecies from '../components/sections/MarqueeEspecies.astro';
+import Proyecto from '../components/sections/Proyecto.astro';
+import Voluntariado from '../components/sections/Voluntariado.astro';
+import Base from '../layouts/Base.astro';
+import { cargarResumenSeguro } from '../lib/portaldeb/resumen';
+
+// Nivel 1: datos de PortalDEB al compilar (SEO y respaldo si la API no responde).
+// Nivel 2: las islas los refrescan en el navegador con TanStack Query.
+const resumen = await cargarResumenSeguro();
+---
+
+<Base
+  title="Árboles para El Salvador · Solicita árboles gratis"
+  description="Solicita árboles gratis de los viveros del MARN, conoce las especies disponibles y súmate a las jornadas de reforestación en El Salvador."
+>
+  <Header />
+  <main id="contenido">
+    <Hero resumen={resumen} />
+
+    <div class="relative z-10 -mb-14">
+      <MarqueeEspecies especies={resumen?.especies ?? []} />
+    </div>
+
+    <Proyecto />
+
+    <section id="especies" class="bg-crema py-28" aria-labelledby="especies-titulo">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="mb-12 grid gap-6 lg:grid-cols-2 lg:items-end">
+          <div>
+            <p class="eyebrow text-hoja-700">Inventario en vivo</p>
+            <h2 id="especies-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
+              ¿Qué quieres <em class="font-serif font-normal tracking-normal text-hoja-700">sembrar?</em>
+            </h2>
+          </div>
+          <p class="text-lg text-marino/70">
+            Maderables, frutales y especies nativas producidas en los viveros del MARN. Las existencias se consultan
+            directamente en PortalDEB.
+          </p>
+        </div>
+        <SpeciesExplorer client:visible inicial={resumen?.especies ?? null} />
+      </div>
+    </section>
+
+    <section id="viveros" class="bg-hoja-100 py-28" aria-labelledby="viveros-titulo">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="mb-12 grid gap-6 lg:grid-cols-2 lg:items-end">
+          <div>
+            <p class="eyebrow text-hoja-700">Red de viveros</p>
+            <h2 id="viveros-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
+              Encuentra tu vivero <em class="font-serif font-normal tracking-normal text-hoja-700">más cercano</em>
+            </h2>
+          </div>
+          <p class="text-lg text-marino/70">
+            Los viveros están en áreas naturales protegidas de todo el país. El tamaño de cada punto indica cuántas
+            plantas tiene disponibles.
+          </p>
+        </div>
+        <ViverosExplorer client:visible inicial={resumen?.viveros ?? null} />
+      </div>
+    </section>
+
+    <Calendario />
+    <Voluntariado />
+  </main>
+  <Footer />
+</Base>

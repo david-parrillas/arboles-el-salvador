@@ -1,0 +1,39 @@
+---
+import { enlaces, navegacion } from '../config/site';
+import Logo from './Logo.astro';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="overflow-hidden bg-marino pt-20 text-crema">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="flex flex-col justify-between gap-12 md:flex-row">
+      <div class="max-w-sm">
+        <Logo lema class="h-28 md:h-32" />
+        <p class="mt-6 text-crema/60">
+          Iniciativa del Ministerio de Medio Ambiente y Recursos Naturales. Las solicitudes y el inventario de los
+          viveros se gestionan en PortalDEB.
+        </p>
+      </div>
+      <nav aria-label="Pie de página" class="grid grid-cols-2 gap-x-16 gap-y-3 text-crema/80">
+        {navegacion.map((item) => (
+          <a href={item.href} class="hover:text-lima">
+            {item.label}
+          </a>
+        ))}
+        <a href={enlaces.solicitudArboles} class="font-semibold text-lima">
+          Solicita tus árboles ↗
+        </a>
+      </nav>
+    </div>
+  </div>
+  <p
+    class="titulo mt-16 text-center text-[15.5vw] leading-[0.8] whitespace-nowrap text-marino-700 select-none"
+    aria-hidden="true"
+  >
+    reforestemos
+  </p>
+  <div class="border-t border-white/10">
+    <p class="mx-auto max-w-7xl px-4 py-6 text-sm text-crema/50 sm:px-6">© {anio} MARN · El Salvador</p>
+  </div>
+</footer>

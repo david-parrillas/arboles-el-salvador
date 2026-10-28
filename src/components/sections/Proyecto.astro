@@ -1,0 +1,71 @@
+---
+import { enlaces } from '../../config/site';
+
+const pasos = [
+  {
+    n: '01',
+    titulo: 'Explora',
+    texto: 'Revisa qué especies hay disponibles y cuál es el vivero más cercano a tu terreno.',
+    color: 'bg-lima',
+  },
+  {
+    n: '02',
+    titulo: 'Solicita',
+    texto: 'Llena el formulario en PortalDEB con la cantidad, las especies y el lugar donde vas a sembrar.',
+    color: 'bg-rosa',
+  },
+  {
+    n: '03',
+    titulo: 'Siembra',
+    texto: 'Retira tus árboles en el vivero asignado, siémbralos siguiendo la guía y cuídalos los primeros años.',
+    color: 'bg-sol',
+  },
+];
+---
+
+<section id="proyecto" class="bg-white pt-36 pb-28 md:pt-44" aria-labelledby="proyecto-titulo">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-end">
+      <div>
+        <p class="eyebrow text-hoja-700">Sobre el proyecto</p>
+        <h2 id="proyecto-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
+          Un país que <em class="font-serif font-normal tracking-normal text-hoja-700">reverdece</em> entre todos.
+        </h2>
+      </div>
+      <p class="text-lg leading-relaxed text-marino/75 md:text-xl">
+        <strong class="text-marino">Árboles para El Salvador</strong> reúne la producción de los viveros del MARN en
+        áreas naturales protegidas para recuperar cuencas, proteger suelos y devolver sombra a las ciudades. Tú pones el
+        terreno y el compromiso; nosotros, los árboles.
+      </p>
+    </div>
+
+    <ol class="mt-16 grid gap-4 md:grid-cols-3">
+      {pasos.map((p) => (
+        <li class="group relative overflow-hidden rounded-[2rem] bg-crema p-8 ring-1 ring-marino/10 transition hover:-translate-y-1 hover:shadow-xl">
+          <span
+            class:list={[
+              'absolute -top-10 -right-10 size-36 rounded-full opacity-90 transition-transform duration-500 group-hover:scale-125',
+              p.color,
+            ]}
+            aria-hidden="true"
+          />
+          <span class="titulo relative text-7xl text-marino/15">{p.n}</span>
+          <h3 class="titulo relative mt-10 text-4xl">{p.titulo}</h3>
+          <p class="relative mt-3 text-marino/70">{p.texto}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="mt-6 flex flex-col items-start justify-between gap-6 rounded-[2rem] bg-hoja-700 p-8 text-white md:flex-row md:items-center md:p-10">
+      <p class="titulo text-3xl md:text-4xl">
+        La solicitud es <span class="text-lima">100 % gratuita</span> y se atiende desde PortalDEB.
+      </p>
+      <a
+        href={enlaces.solicitudArboles}
+        class="shrink-0 rounded-full bg-lima px-7 py-4 font-bold text-marino transition hover:bg-lima-300"
+      >
+        Ir al formulario ↗
+      </a>
+    </div>
+  </div>
+</section>
