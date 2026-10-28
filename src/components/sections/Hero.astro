@@ -39,7 +39,7 @@ const petalos = [
 ---
 
 <section
-  class="relative isolate overflow-hidden bg-gradient-to-b from-crema via-crema to-hoja-100 pt-32 pb-10 sm:pt-40"
+  class="relative isolate overflow-hidden bg-gradient-to-b from-crema via-crema to-verde-50 pt-32 pb-10 sm:pt-40"
   aria-labelledby="hero-titulo"
 >
   <!-- Paisaje: sol tras el volcán y capas de montañas en los verdes del logo -->
@@ -58,17 +58,17 @@ const petalos = [
     <circle cx="1075" cy="95" r="150" fill="url(#sol)"></circle>
     <path
       d="M0 300 L180 236 L320 262 L520 128 L590 116 L700 204 L860 176 L1040 66 L1110 60 L1250 196 L1440 150 V400 H0Z"
-      fill="var(--color-salvia-200)"
+      fill="var(--color-pasto-200)"
     ></path>
     <path
       d="M0 340 L240 282 L420 302 L640 196 L700 192 L900 300 L1100 262 L1300 300 L1440 278 V400 H0Z"
-      fill="var(--color-salvia-300)"
+      fill="var(--color-pasto-300)"
     ></path>
-    <path d="M0 400 V356 Q220 314 440 344 T880 334 T1440 320 V400Z" fill="var(--color-salvia)"></path>
+    <path d="M0 400 V356 Q220 314 440 344 T880 334 T1440 320 V400Z" fill="var(--color-pasto)"></path>
     {arboles.map(([x, y, r]) => (
-      <g fill="var(--color-hoja)">
+      <g fill="var(--color-verde)">
         <circle cx={x} cy={y - r} r={r} />
-        <rect x={x - 2} y={y - r} width="4" height={r + 8} fill="var(--color-hoja-700)" />
+        <rect x={x - 2} y={y - r} width="4" height={r + 8} fill="var(--color-olivo)" />
       </g>
     ))}
   </svg>
@@ -84,14 +84,14 @@ const petalos = [
   <div class="mx-auto max-w-7xl px-4 sm:px-6">
     <div class="relative">
       <p class="eyebrow inline-flex items-center gap-2 rounded-full border border-marino/15 bg-white/60 px-4 py-2 text-marino/75">
-        <span class="size-1.5 rounded-full bg-hoja"></span>
+        <span class="size-1.5 rounded-full bg-verde"></span>
         Programa nacional de reforestación
       </p>
 
       <h1 id="hero-titulo" class="titulo mt-8 max-w-5xl text-[clamp(3.4rem,9vw,8.5rem)] text-balance">
         Sembremos{' '}
         <span class="block">
-          un <em class="font-serif font-normal tracking-normal text-hoja-700">pulmón</em>
+          un <em class="font-serif font-normal tracking-normal text-verde">pulmón</em>
         </span>
         <span class="block">
           <span class="box-decoration-clone bg-[linear-gradient(transparent_58%,var(--color-lima)_58%,var(--color-lima)_92%,transparent_92%)] px-1">
@@ -108,7 +108,7 @@ const petalos = [
         <div class="flex flex-wrap gap-3">
           <a
             href={enlaces.solicitudArboles}
-            class="group inline-flex items-center gap-3 rounded-full bg-hoja-700 py-4 pr-4 pl-7 text-lg font-bold text-white transition hover:bg-hoja-800"
+            class="group inline-flex items-center gap-3 rounded-full bg-olivo py-4 pr-4 pl-7 text-lg font-bold text-white transition hover:bg-verde"
           >
             Solicita tus árboles
             <span

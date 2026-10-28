@@ -5,7 +5,7 @@ import type { ResumenEspecie } from '../../lib/portaldeb/resumen';
 import { normalizar, numero } from '../../lib/texto';
 
 const POR_PAGINA = 12;
-const acentos = ['bg-hoja', 'bg-rosa-400', 'bg-sol'];
+const acentos = ['bg-verde', 'bg-rosa-400', 'bg-pasto'];
 
 interface Props {
   inicial: ResumenEspecie[] | null;
@@ -57,7 +57,7 @@ function SpeciesExplorer({ inicial }: Props) {
               setLimite(POR_PAGINA);
             }}
             placeholder="Busca por nombre común o científico: cedro, Swietenia…"
-            className="w-full rounded-full border-2 border-marino/15 bg-white py-4 pr-5 pl-13 text-lg text-marino placeholder:text-marino/40 focus:border-hoja-700 focus:outline-none"
+            className="w-full rounded-full border-2 border-marino/15 bg-white py-4 pr-5 pl-13 text-lg text-marino placeholder:text-marino/40 focus:border-olivo focus:outline-none"
           />
         </label>
         <button
@@ -66,7 +66,7 @@ function SpeciesExplorer({ inicial }: Props) {
           onClick={() => setSoloDisponibles((v) => !v)}
           className={`rounded-full border-2 px-6 py-4 font-semibold transition ${
             soloDisponibles
-              ? 'border-hoja-700 bg-hoja-700 text-white'
+              ? 'border-olivo bg-olivo text-white'
               : 'border-marino/15 bg-white text-marino hover:border-marino'
           }`}
         >

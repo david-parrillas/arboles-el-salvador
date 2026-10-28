@@ -44,9 +44,9 @@ function LiveStats({ inicial, generadoEn }: Props) {
   }, [enVivo]);
 
   const tarjetas = [
-    { valor: datos?.plantas, etiqueta: 'plantas listas para sembrar', acento: 'bg-hoja' },
+    { valor: datos?.plantas, etiqueta: 'plantas listas para sembrar', acento: 'bg-verde' },
     { valor: datos?.especies, etiqueta: 'especies con existencias', acento: 'bg-rosa-400' },
-    { valor: datos?.viverosConExistencia, etiqueta: 'viveros en todo el país', acento: 'bg-sol' },
+    { valor: datos?.viverosConExistencia, etiqueta: 'viveros en todo el país', acento: 'bg-pasto' },
   ];
 
   return (
@@ -65,7 +65,7 @@ function LiveStats({ inicial, generadoEn }: Props) {
       <p className="flex flex-wrap items-center gap-x-2 px-5 pt-3 pb-2 text-xs text-marino/60">
         <span
           aria-hidden="true"
-          className={`size-2 rounded-full ${enVivo ? 'animate-pulso bg-hoja' : error ? 'bg-sol' : 'bg-marino/30'}`}
+          className={`size-2 rounded-full ${enVivo ? 'animate-pulso bg-verde' : error ? 'bg-pasto' : 'bg-marino/30'}`}
         />
         {enVivo && ahora
           ? `En vivo desde PortalDEB · ${hora.format(ahora)}`

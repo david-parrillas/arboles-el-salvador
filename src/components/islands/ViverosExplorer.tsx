@@ -36,10 +36,10 @@ function ViverosExplorer({ inicial }: Props) {
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Busca por municipio o departamento…"
-            className="w-full rounded-full border border-marino/15 bg-crema px-5 py-3.5 text-marino placeholder:text-marino/40 focus:border-hoja-700 focus:outline-none"
+            className="w-full rounded-full border border-marino/15 bg-crema px-5 py-3.5 text-marino placeholder:text-marino/40 focus:border-olivo focus:outline-none"
           />
         </label>
-        <ul className="max-h-[420px] flex-1 [scrollbar-color:var(--color-salvia-300)_transparent] space-y-1.5 overflow-y-auto p-2 lg:max-h-none">
+        <ul className="max-h-[420px] flex-1 [scrollbar-color:var(--color-pasto-300)_transparent] space-y-1.5 overflow-y-auto p-2 lg:max-h-none">
           {filtrados.map((v) => {
             const activo = v.id === seleccionado;
             return (
@@ -49,13 +49,13 @@ function ViverosExplorer({ inicial }: Props) {
                   onClick={() => setSeleccionado(activo ? null : v.id)}
                   aria-expanded={activo}
                   className={`w-full rounded-3xl px-5 py-4 text-left transition ${
-                    activo ? 'bg-rosa text-marino' : 'hover:bg-hoja-100'
+                    activo ? 'bg-rosa text-marino' : 'hover:bg-verde-50'
                   }`}
                 >
                   <span className="flex items-baseline justify-between gap-4">
                     <span className="font-bold">{nombreCorto(v.nombre)}</span>
                     <span
-                      className={`shrink-0 text-sm tabular-nums ${activo ? 'text-marino/70' : 'font-semibold text-hoja-700'}`}
+                      className={`shrink-0 text-sm tabular-nums ${activo ? 'text-marino/70' : 'font-semibold text-olivo'}`}
                     >
                       {v.total > 0 ? numero.format(v.total) : '—'}
                     </span>
@@ -88,7 +88,7 @@ function ViverosExplorer({ inicial }: Props) {
         </ul>
         <a
           href={enlaces.solicitudArboles}
-          className="m-2 rounded-full bg-hoja-700 px-6 py-4 text-center font-bold text-white transition hover:bg-hoja-800"
+          className="m-2 rounded-full bg-olivo px-6 py-4 text-center font-bold text-white transition hover:bg-verde"
         >
           Solicitar árboles de un vivero ↗
         </a>

@@ -6,24 +6,22 @@
   --font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
 
-  /* Colores tomados del logo oficial + rosado suave de la flor de maquilishuat */
+  /* Línea gráfica oficial de Árboles para El Salvador:
+     #f0ff5f #27295c #3e5926 #aacb41 #2f8944 (+ rosado del maquilishuat, árbol nacional).
+     Los "-50/-200/-300" son tintes de esos colores mezclados con blanco. */
   --color-marino: #27295c;
   --color-marino-700: #33366f;
-  --color-hoja: #47ad4c;
-  --color-hoja-700: #2b7a38;
-  --color-hoja-800: #23652f;
-  --color-hoja-100: #e9f3e4;
-  --color-salvia: #63ae76;
-  --color-salvia-300: #a9d3b0;
-  --color-salvia-200: #cfe5d3;
   --color-lima: #f0ff5f;
   --color-lima-300: #f6ff9e;
+  --color-olivo: #3e5926;
+  --color-verde: #2f8944;
+  --color-verde-50: #eaf3ec;
+  --color-pasto: #aacb41;
+  --color-pasto-300: #cce08d;
+  --color-pasto-200: #e1edbc;
   --color-rosa: #f8c8da;
   --color-rosa-400: #f0a5c2;
-  --color-rosa-100: #fdeef4;
-  --color-sol: #ffd166;
   --color-crema: #faf7ef;
-  --color-crema-200: #f3efe3;
 
   --animate-marquee: marquee 45s linear infinite;
   --animate-girar: girar 18s linear infinite;
@@ -51,7 +49,7 @@
   }
   @keyframes pulso {
     0% {
-      box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-hoja) 60%, transparent);
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-verde) 60%, transparent);
     }
     100% {
       box-shadow: 0 0 0 10px transparent;
@@ -73,7 +71,7 @@
     @apply bg-lima text-marino;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-4 outline-hoja-700;
+    @apply outline-2 outline-offset-4 outline-olivo;
   }
 }
 
