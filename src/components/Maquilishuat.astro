@@ -1,0 +1,94 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: clase } = Astro.props;
+
+// Generador pseudoaleatorio con semilla fija: el árbol sale igual en cada build.
+let semilla = 7;
+const azar = () => {
+  semilla = (semilla * 16807) % 2147483647;
+  return (semilla - 1) / 2147483646;
+};
+
+// Copa del maquilishuat: racimos de flores rosadas sobre una elipse ancha y achatada.
+const tonos = ['var(--color-rosa)', 'var(--color-rosa-400)', 'var(--color-rosa-600)'];
+const racimos = Array.from({ length: 95 }, () => {
+  const angulo = azar() * Math.PI * 2;
+  const radio = Math.sqrt(azar());
+  return {
+    x: 150 + Math.cos(angulo) * radio * 126,
+    y: 112 + Math.sin(angulo) * radio * 56,
+    r: 11 + azar() * 13,
+    fill: tonos[Math.floor(azar() * tonos.length)],
+  };
+}).sort((a, b) => a.y - b.y);
+
+// Flores sueltas (cinco pétalos) por encima de los racimos.
+const flores = Array.from({ length: 26 }, () => {
+  const angulo = azar() * Math.PI * 2;
+  const radio = 0.2 + azar() * 0.85;
+  return {
+    x: 150 + Math.cos(angulo) * radio * 124,
+    y: 110 + Math.sin(angulo) * radio * 52,
+    giro: Math.round(azar() * 72),
+  };
+});
+
+// Hojas y pétalos que caen desde la copa.
+const caidas = Array.from({ length: 14 }, (_, i) => ({
+  left: `${12 + azar() * 76}%`,
+  top: `${18 + azar() * 28}%`,
+  dx: `${Math.round(-60 + azar() * 120)}px`,
+  dur: `${(7 + azar() * 6).toFixed(1)}s`,
+  delay: `${(-azar() * 13).toFixed(1)}s`,
+  size: i % 3 === 0 ? 'size-3.5' : i % 3 === 1 ? 'size-2.5' : 'size-2',
+  color: i % 4 === 0 ? 'bg-rosa-600/80' : i % 2 ? 'bg-rosa-400/90' : 'bg-rosa',
+}));
+---
+
+<div class:list={['pointer-events-none', clase ?? 'relative']} aria-hidden="true">
+  <svg viewBox="0 0 300 340" class="size-full overflow-visible">
+    <ellipse cx="150" cy="326" rx="96" ry="10" fill="var(--color-pasto-300)"></ellipse>
+    <!-- Hojas y flores ya caídas al pie del árbol -->
+    <g fill="var(--color-rosa-400)">
+      <circle cx="92" cy="324" r="3"></circle>
+      <circle cx="118" cy="330" r="2.5"></circle>
+      <circle cx="186" cy="322" r="3"></circle>
+      <circle cx="214" cy="329" r="2.5"></circle>
+      <circle cx="160" cy="332" r="2"></circle>
+    </g>
+
+    <g class="animate-mecer origin-[150px_326px]">
+      <!-- Tronco y ramas -->
+      <path
+        d="M140 328 C142 290 146 250 144 214 C130 196 108 178 82 160 L88 154 C110 168 132 182 146 196 C146 170 140 148 128 124 L136 120 C148 142 154 166 154 190 C160 170 176 148 198 132 L204 138 C184 156 168 178 160 206 C182 192 210 178 232 172 L234 180 C210 188 184 204 162 222 C158 256 160 292 164 328 Z"
+        fill="var(--color-cafe)"
+      ></path>
+
+      <!-- Copa -->
+      <g>
+        {racimos.map((c) => (
+          <circle cx={c.x.toFixed(1)} cy={c.y.toFixed(1)} r={c.r.toFixed(1)} fill={c.fill} />
+        ))}
+      </g>
+      <g>
+        {flores.map((f) => (
+          <g transform={`translate(${f.x.toFixed(1)} ${f.y.toFixed(1)}) rotate(${f.giro})`}>
+            {[0, 72, 144, 216, 288].map((a) => (
+              <ellipse cx="0" cy="-5" rx="3" ry="5" fill="white" fill-opacity="0.75" transform={`rotate(${a})`} />
+            ))}
+            <circle r="2" fill="var(--color-lima)" />
+          </g>
+        ))}
+      </g>
+    </g>
+  </svg>
+
+  {caidas.map((c) => (
+    <span
+      class:list={['animate-caer absolute rounded-[70%_0] opacity-0', c.size, c.color]}
+      style={`left:${c.left};top:${c.top};--dx:${c.dx};animation-duration:${c.dur};animation-delay:${c.delay}`}
+    />
+  ))}
+</div>

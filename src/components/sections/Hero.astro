@@ -2,6 +2,7 @@
 import { enlaces } from '../../config/site';
 import type { Resumen } from '../../lib/portaldeb/resumen';
 import LiveStats from '../islands/LiveStats';
+import Maquilishuat from '../Maquilishuat.astro';
 
 interface Props {
   resumen: Resumen | null;
@@ -127,29 +128,8 @@ const petalos = [
         </div>
       </div>
 
-      <!-- Sello giratorio -->
-      <a
-        href={enlaces.solicitudArboles}
-        class="group absolute top-0 right-0 hidden size-40 lg:block xl:size-44"
-        aria-label="Solicita tus árboles, es gratis"
-      >
-        <svg viewBox="0 0 200 200" class="animate-girar size-full" aria-hidden="true">
-          <defs>
-            <path id="circulo" d="M100 100 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0"></path>
-          </defs>
-          <text class="fill-marino text-[15px] font-bold uppercase">
-            <textPath href="#circulo" textLength="486" lengthAdjust="spacing">
-              Es gratis ✺ Siembra ✺ Cuida ✺ Comparte ✺
-            </textPath>
-          </text>
-        </svg>
-        <span
-          class="absolute inset-0 m-auto grid size-16 place-items-center rounded-full bg-rosa text-3xl text-marino transition group-hover:scale-110"
-          aria-hidden="true"
-        >
-          ✿
-        </span>
-      </a>
+      <!-- Maquilishuat, árbol nacional, soltando sus flores -->
+      <Maquilishuat class="absolute -top-10 right-0 hidden h-72 w-64 lg:block xl:h-80 xl:w-72" />
     </div>
 
     <div class="mt-16 sm:mt-24">

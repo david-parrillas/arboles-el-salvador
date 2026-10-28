@@ -23,12 +23,16 @@
   --color-pasto-200: #e1edbc;
   --color-rosa: #f8c8da;
   --color-rosa-400: #f0a5c2;
+  --color-rosa-600: #e483ac;
   --color-crema: #faf7ef;
+  --color-cafe: #7a5236;
 
   --animate-marquee: marquee 45s linear infinite;
   --animate-girar: girar 18s linear infinite;
   --animate-flotar: flotar 9s ease-in-out infinite;
   --animate-pulso: pulso 2s ease-out infinite;
+  --animate-mecer: mecer 7s ease-in-out infinite;
+  --animate-caer: caer 9s linear infinite;
 
   @keyframes marquee {
     to {
@@ -47,6 +51,35 @@
     }
     50% {
       transform: translate3d(12px, -28px, 0) rotate(40deg);
+    }
+  }
+  @keyframes mecer {
+    0%,
+    100% {
+      transform: rotate(-1.2deg);
+    }
+    50% {
+      transform: rotate(1.2deg);
+    }
+  }
+  /* Usa --dx (deriva horizontal) definida en cada pétalo. */
+  @keyframes caer {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    10% {
+      opacity: 1;
+    }
+    50% {
+      transform: translate3d(calc(var(--dx) * 0.4), 120px, 0) rotate(220deg);
+    }
+    85% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(var(--dx), 240px, 0) rotate(480deg);
     }
   }
   @keyframes pulso {
