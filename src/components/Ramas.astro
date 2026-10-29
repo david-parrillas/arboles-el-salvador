@@ -43,7 +43,11 @@ const grupos = [
     brote(principales[0], 0.7, [200, 20], [250, 50], 7),
     brote(principales[0], 0.88, [90, 200], [140, 150], 6),
   ],
-  [principales[1], brote(principales[1], 0.55, [400, 330], [370, 270], 7), brote(principales[1], 0.8, [210, 230], [250, 230], 5)],
+  [
+    principales[1],
+    brote(principales[1], 0.55, [400, 330], [370, 270], 7),
+    brote(principales[1], 0.8, [210, 230], [250, 230], 5),
+  ],
   [principales[2], brote(principales[2], 0.6, [400, 240], [440, 210], 5)],
 ];
 
@@ -103,29 +107,42 @@ const caidas = Array.from({ length: 18 }, (_, i) => ({
   size: i % 3 === 0 ? 'size-4' : i % 3 === 1 ? 'size-3' : 'size-2.5',
   color: i % 4 === 0 ? 'bg-rosa-600/80' : i % 2 ? 'bg-rosa-400/90' : 'bg-rosa',
 }));
+
+// Reserva de hojas que se reutilizan al sacudir una rama (sin crear nodos nuevos).
+const reserva = Array.from({ length: 16 }, (_, i) => ({
+  size: i % 3 === 0 ? 'size-4' : i % 3 === 1 ? 'size-3' : 'size-2.5',
+  color: i % 3 === 0 ? 'bg-rosa-600/80' : i % 2 ? 'bg-rosa-400/90' : 'bg-rosa',
+}));
 ---
 
-<div class:list={['pointer-events-none', clase ?? 'relative']} aria-hidden="true">
+<div class:list={['pointer-events-none', clase ?? 'relative']} aria-hidden="true" data-ramas>
   <svg viewBox="0 0 520 420" class="size-full overflow-visible">
     {ramas.map((g) => (
-      <g class="animate-mecer" style={`transform-origin:${g.origen[0]}px ${g.origen[1]}px;animation-delay:${g.retraso}`}>
-        {g.trazos.map((d, i) => (
-          <path d={d} fill="none" stroke="var(--color-cafe)" stroke-width={g.grosores[i]} stroke-linecap="round" />
-        ))}
-        {g.hojas.map((h) => (
-          <g transform={`translate(${h.x.toFixed(1)} ${h.y.toFixed(1)}) rotate(${h.giro.toFixed(0)}) scale(${h.escala.toFixed(2)})`}>
-            <path d="M0 0 C7 -9 22 -9 30 0 C22 9 7 9 0 0Z" fill={h.fill} />
-            <path d="M3 0 H25" stroke="white" stroke-opacity="0.35" stroke-width="1" />
-          </g>
-        ))}
-        {g.flores.map((f) => (
-          <g transform={`translate(${f.x.toFixed(1)} ${f.y.toFixed(1)}) rotate(${f.giro})`}>
-            {[0, 72, 144, 216, 288].map((a) => (
-              <ellipse cx="0" cy="-6" rx="3.5" ry="6" fill="white" fill-opacity="0.85" transform={`rotate(${a})`} />
-            ))}
-            <circle r="2.5" fill="var(--color-lima)" />
-          </g>
-        ))}
+      <g
+        class="animate-mecer"
+        style={`transform-origin:${g.origen[0]}px ${g.origen[1]}px;animation-delay:${g.retraso}`}
+      >
+        <g class="pointer-events-auto" style={`transform-origin:${g.origen[0]}px ${g.origen[1]}px`} data-rama>
+          {g.trazos.map((d, i) => (
+            <path d={d} fill="none" stroke="var(--color-cafe)" stroke-width={g.grosores[i]} stroke-linecap="round" />
+          ))}
+          {g.hojas.map((h) => (
+            <g
+              transform={`translate(${h.x.toFixed(1)} ${h.y.toFixed(1)}) rotate(${h.giro.toFixed(0)}) scale(${h.escala.toFixed(2)})`}
+            >
+              <path d="M0 0 C7 -9 22 -9 30 0 C22 9 7 9 0 0Z" fill={h.fill} />
+              <path d="M3 0 H25" stroke="white" stroke-opacity="0.35" stroke-width="1" />
+            </g>
+          ))}
+          {g.flores.map((f) => (
+            <g transform={`translate(${f.x.toFixed(1)} ${f.y.toFixed(1)}) rotate(${f.giro})`}>
+              {[0, 72, 144, 216, 288].map((a) => (
+                <ellipse cx="0" cy="-6" rx="3.5" ry="6" fill="white" fill-opacity="0.85" transform={`rotate(${a})`} />
+              ))}
+              <circle r="2.5" fill="var(--color-lima)" />
+            </g>
+          ))}
+        </g>
       </g>
     ))}
   </svg>
@@ -136,4 +153,62 @@ const caidas = Array.from({ length: 18 }, (_, i) => ({
       style={`left:${c.left};top:${c.top};--dx:${c.dx};--dy:${c.dy};animation-duration:${c.dur};animation-delay:${c.delay}`}
     />
   ))}
+
+  {reserva.map((r) => (
+    <span class:list={['absolute top-0 left-0 rounded-[70%_0] opacity-0', r.size, r.color]} data-hoja-extra />
+  ))}
 </div>
+
+<script>
+  // Al pasar el mouse por una rama: sacudida amortiguada y unas hojas extra que caen.
+  // Solo anima transform y opacity con Web Animations, y no reinicia mientras la sacudida sigue en curso.
+  const sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const contenedor of document.querySelectorAll<HTMLElement>('[data-ramas]')) {
+    const extras = [...contenedor.querySelectorAll<HTMLElement>('[data-hoja-extra]')];
+    let siguiente = 0;
+
+    const soltarHojas = (x: number, y: number) => {
+      for (let i = 0; i < 4; i++) {
+        const hoja = extras[siguiente];
+        siguiente = (siguiente + 1) % extras.length;
+        const dx = -70 + Math.random() * 110;
+        const dy = 300 + Math.random() * 160;
+        const giro = 300 + Math.random() * 300;
+        hoja.style.left = `${x - 30 + Math.random() * 60}px`;
+        hoja.style.top = `${y - 20 + Math.random() * 40}px`;
+        hoja.getAnimations().forEach((a) => a.cancel());
+        hoja.animate(
+          [
+            { opacity: 0, transform: 'translate3d(0, 0, 0) rotate(0deg)' },
+            { opacity: 1, offset: 0.1 },
+            { opacity: 0.9, offset: 0.85 },
+            { opacity: 0, transform: `translate3d(${dx}px, ${dy}px, 0) rotate(${giro}deg)` },
+          ],
+          { duration: 3500 + Math.random() * 2500, delay: i * 120, easing: 'cubic-bezier(.3,.1,.6,1)' },
+        );
+      }
+    };
+
+    for (const rama of contenedor.querySelectorAll<SVGGElement>('[data-rama]')) {
+      let sacudida: Animation | null = null;
+      rama.addEventListener('pointerenter', (evento) => {
+        if (sinMovimiento.matches || sacudida?.playState === 'running') return;
+        sacudida = rama.animate(
+          [
+            { transform: 'rotate(0deg)' },
+            { transform: 'rotate(3.5deg)' },
+            { transform: 'rotate(-2.8deg)' },
+            { transform: 'rotate(1.8deg)' },
+            { transform: 'rotate(-1deg)' },
+            { transform: 'rotate(0.4deg)' },
+            { transform: 'rotate(0deg)' },
+          ],
+          { duration: 1100, easing: 'ease-out' },
+        );
+        const caja = contenedor.getBoundingClientRect();
+        soltarHojas(evento.clientX - caja.left, evento.clientY - caja.top);
+      });
+    }
+  }
+</script>
