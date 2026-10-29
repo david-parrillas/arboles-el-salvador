@@ -62,7 +62,7 @@
       transform: rotate(1.2deg);
     }
   }
-  /* Usa --dx (deriva horizontal) definida en cada pétalo. */
+  /* Usa --dx (deriva horizontal) y --dy opcional (caída, 240px por defecto) de cada pétalo. */
   @keyframes caer {
     0% {
       opacity: 0;
@@ -72,14 +72,14 @@
       opacity: 1;
     }
     50% {
-      transform: translate3d(calc(var(--dx) * 0.4), 120px, 0) rotate(220deg);
+      transform: translate3d(calc(var(--dx) * 0.4), calc(var(--dy, 240px) * 0.5), 0) rotate(220deg);
     }
     85% {
       opacity: 0.9;
     }
     100% {
       opacity: 0;
-      transform: translate3d(var(--dx), 240px, 0) rotate(480deg);
+      transform: translate3d(var(--dx), var(--dy, 240px), 0) rotate(480deg);
     }
   }
   @keyframes pulso {

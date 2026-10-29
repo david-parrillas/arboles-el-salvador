@@ -2,7 +2,7 @@
 import { enlaces } from '../../config/site';
 import type { Resumen } from '../../lib/portaldeb/resumen';
 import LiveStats from '../islands/LiveStats';
-import Maquilishuat from '../Maquilishuat.astro';
+import Ramas from '../Ramas.astro';
 
 interface Props {
   resumen: Resumen | null;
@@ -45,7 +45,7 @@ const petalos = [
 >
   <!-- Paisaje: sol tras el volcán y capas de montañas en los verdes del logo -->
   <svg
-    class="pointer-events-none absolute bottom-0 left-1/2 -z-10 h-auto w-[max(100%,1100px)] -translate-x-1/2"
+    class="pointer-events-none absolute bottom-0 left-1/2 -z-10 h-auto overflow-visible w-[max(100%,1100px)] -translate-x-1/2"
     viewBox="0 0 1440 400"
     aria-hidden="true"
   >
@@ -73,6 +73,9 @@ const petalos = [
       </g>
     ))}
   </svg>
+
+  <!-- Ramas que cuelgan desde la esquina y sueltan hojas -->
+  <Ramas class="absolute top-0 right-0 hidden h-[420px] w-[520px] lg:block xl:h-[480px] xl:w-[600px]" />
 
   {petalos.map((p) => (
     <span
@@ -127,9 +130,6 @@ const petalos = [
           </a>
         </div>
       </div>
-
-      <!-- Maquilishuat, árbol nacional, soltando sus flores -->
-      <Maquilishuat class="absolute -top-10 right-0 hidden h-72 w-64 lg:block xl:h-80 xl:w-72" />
     </div>
 
     <div class="mt-16 sm:mt-24">
