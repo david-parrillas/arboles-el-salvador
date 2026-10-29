@@ -45,7 +45,7 @@ function LiveStats({ inicial, generadoEn }: Props) {
 
   // No se publican cantidades de plantas: solo cuántas especies y viveros hay.
   const tarjetas: { valor?: number; texto?: string; etiqueta: string; acento: string }[] = [
-    { valor: datos?.especies, etiqueta: 'especies disponibles', acento: 'bg-verde' },
+    { valor: datos?.especies, etiqueta: 'especies disponibles hoy en viveros', acento: 'bg-verde' },
     { valor: datos?.viveros, etiqueta: 'viveros en todo el país', acento: 'bg-rosa-400' },
     { texto: 'Gratis', etiqueta: 'para quien se comprometa a sembrar', acento: 'bg-pasto' },
   ];
