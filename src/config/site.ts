@@ -1,7 +1,7 @@
-export const PORTALDEB_URL = (import.meta.env.PUBLIC_PORTALDEB_URL ?? 'https://portaldeb.marn.gob.sv').replace(
-  /\/$/,
-  '',
-);
+// Formularios públicos del Portal (enlaces, no API). La URL de la API y el token viven
+// en astro:env/server (PORTALDEB_URL, PORTALDEB_TOKEN) y este archivo no debe importarlos:
+// lo usan también las islas.
+const PORTAL_PUBLICO = 'https://portaldeb.marn.gob.sv';
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -14,9 +14,9 @@ export function ruta(path = '') {
 export const esPrototipo = import.meta.env.PUBLIC_PROTOTIPO !== 'false';
 
 export const enlaces = {
-  solicitudArboles: `${PORTALDEB_URL}/public/viveros/solicitud/form`,
+  solicitudArboles: `${PORTAL_PUBLICO}/public/viveros/solicitud/form`,
   // TODO: el formulario de voluntarios aún no existe en PortalDEB.
-  voluntarios: `${PORTALDEB_URL}/public/voluntarios/form`,
+  voluntarios: `${PORTAL_PUBLICO}/public/voluntarios/form`,
   guiaReforestacion: ruta('docs/guia-reforestacion.pdf'),
 } as const;
 
@@ -24,6 +24,4 @@ export const navegacion = [
   { href: '#proyecto', label: 'El proyecto' },
   { href: '#especies', label: 'Especies' },
   { href: '#viveros', label: 'Viveros' },
-  { href: '#calendario', label: 'Calendario' },
-  { href: '#voluntariado', label: 'Voluntariado' },
 ] as const;

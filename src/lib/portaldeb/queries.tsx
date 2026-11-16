@@ -1,7 +1,24 @@
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { useEffect, useState, type ComponentType } from 'react';
-import { cargarJornadas, type Jornadas } from './jornadas';
-import { cargarResumen, type Resumen } from './resumen';
+import { z } from 'zod';
+import { ruta } from '../../config/site';
+import type { Jornadas } from './jornadas';
+import type { Resumen } from './resumen';
+import { jornadaSchema, resumenSchema } from './schemas';
+
+// Las islas piden al proxy del mismo origen (src/pages/api/), nunca al Portal:
+// el token solo existe en el servidor.
+async function pedir<S extends z.ZodType>(path: string, schema: S): Promise<z.infer<S>> {
+  const res = await fetch(ruta(path), { headers: { Accept: 'application/json' } });
+  if (!res.ok) throw new Error(`${path} respondió ${res.status}`);
+  return schema.parse(await res.json());
+}
+
+const cargarResumen = () => pedir('api/resumen', resumenSchema);
+const cargarJornadas = async (): Promise<Jornadas> => ({
+  lista: await pedir('api/jornadas', z.array(jornadaSchema)),
+  ejemplo: false,
+});
 
 // Cada isla de Astro es una raíz de React distinta, pero este módulo se
 // comparte entre ellas: todas usan la misma caché y el mismo fetch.
