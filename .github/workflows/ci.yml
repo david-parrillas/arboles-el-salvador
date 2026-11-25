@@ -19,8 +19,6 @@ jobs:
       PORTALDEB_URL: ${{ vars.PORTALDEB_URL || 'https://portaldeb.marn.gob.sv' }}
       # Secreto de Actions (y de Dependabot para sus PRs). Sin él, el build de producción falla a propósito.
       PORTALDEB_TOKEN: ${{ secrets.PORTALDEB_TOKEN }}
-      # El certificado del Portal lo firma la CA interna del MARN, que Node no trae.
-      NODE_EXTRA_CA_CERTS: ${{ github.workspace }}/certs/marn-ca.pem
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
@@ -34,6 +32,10 @@ jobs:
       # Si PortalDEB no responde (red o 5xx), el build no falla: genera la página sin datos.
       # Si rechaza el token (401/403), el build falla.
       - run: pnpm build
+        env:
+          # El certificado del Portal lo firma la CA interna del MARN, que Node no trae.
+          # Solo en este paso: antes del checkout el archivo aún no existe.
+          NODE_EXTRA_CA_CERTS: ${{ github.workspace }}/certs/marn-ca.pem
       - uses: actions/upload-artifact@v4
         with:
           name: dist
