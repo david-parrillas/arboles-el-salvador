@@ -16,7 +16,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PUBLIC_PORTALDEB_URL: ${{ vars.PUBLIC_PORTALDEB_URL || 'https://portaldeb.marn.gob.sv' }}
+      PORTALDEB_URL: ${{ vars.PORTALDEB_URL || 'https://portaldeb.marn.gob.sv' }}
+      # Secreto de Actions (y de Dependabot para sus PRs). Sin él, el build de producción falla a propósito.
+      PORTALDEB_TOKEN: ${{ secrets.PORTALDEB_TOKEN }}
+      # El certificado del Portal lo firma la CA interna del MARN, que Node no trae.
+      NODE_EXTRA_CA_CERTS: ${{ github.workspace }}/certs/marn-ca.pem
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
@@ -27,7 +31,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm format:check
       - run: pnpm check
-      # Si PortalDEB no responde desde GitHub, el build no falla: genera la página sin datos.
+      # Si PortalDEB no responde (red o 5xx), el build no falla: genera la página sin datos.
+      # Si rechaza el token (401/403), el build falla.
       - run: pnpm build
       - uses: actions/upload-artifact@v4
         with:
