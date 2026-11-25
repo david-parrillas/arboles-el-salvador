@@ -1,4 +1,5 @@
 ---
+import Flecha from '../Flecha.astro';
 import { enlaces } from '../../config/site';
 
 const pasos = [
@@ -33,9 +34,10 @@ const pasos = [
         </h2>
       </div>
       <p class="text-lg leading-relaxed text-marino/75 md:text-xl">
-        <strong class="text-marino">Árboles para El Salvador</strong> reúne la producción de los viveros del MARN en
-        áreas naturales protegidas para recuperar cuencas, proteger suelos y devolver sombra a las ciudades. Tú pones el
-        terreno y el compromiso; nosotros, los árboles.
+        <strong class="text-marino">Objetivo general:</strong> contribuir a la conservación y propagación de especies
+        arbóreas frutales, forestales y de uso múltiple, necesarias en los procesos de restauración en El Salvador, para
+        revertir la degradación de ecosistemas críticos y recuperar las funciones ecosistémicas, principalmente en las
+        zonas de recarga hídrica.
       </p>
     </div>
 
@@ -64,7 +66,7 @@ const pasos = [
         href={enlaces.solicitudArboles}
         class="shrink-0 rounded-full bg-lima px-7 py-4 font-bold text-marino transition hover:bg-lima-300"
       >
-        Ir al formulario ↗
+        Ir al formulario <Flecha class="ml-1.5 size-[1em] align-[-0.125em]" />
       </a>
     </div>
   </div>

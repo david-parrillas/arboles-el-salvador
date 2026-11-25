@@ -1,0 +1,55 @@
+---
+import Flecha from '../components/Flecha.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { enlaces, ruta } from '../config/site';
+import Base from './Base.astro';
+
+// Estructura de las páginas internas (especies, viveros): encabezado, volver al inicio y contenido.
+// Slots: "titulo" (contenido del h1), "texto" (párrafo a la derecha) y el contenido principal.
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  /** Ancla de la sección del inicio a la que regresa "Volver al inicio". */
+  volverA: string;
+  fondo?: string;
+}
+
+const { title, description, eyebrow, volverA, fondo = 'bg-crema' } = Astro.props;
+---
+
+<Base title={`${title} · Árboles para El Salvador`} description={description}>
+  <Header />
+  <main id="contenido" class:list={['pt-36 pb-28 sm:pt-44', fondo]}>
+    <section class="mx-auto max-w-7xl px-4 sm:px-6" aria-labelledby="pagina-titulo">
+      <a
+        href={ruta(`#${volverA}`)}
+        class="inline-flex items-center gap-1.5 text-sm font-semibold text-olivo hover:underline"
+      >
+        <Flecha direccion="atras" /> Volver al inicio
+      </a>
+      <div class="mt-6 mb-12 grid gap-6 lg:grid-cols-2 lg:items-end">
+        <div>
+          <p class="eyebrow text-olivo">{eyebrow}</p>
+          <h1 id="pagina-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
+            <slot name="titulo" />
+          </h1>
+        </div>
+        <div>
+          <p class="text-lg text-marino/70">
+            <slot name="texto" />
+          </p>
+          <a
+            href={enlaces.solicitudArboles}
+            class="mt-6 inline-flex rounded-full bg-olivo px-7 py-4 font-bold text-white transition hover:bg-verde"
+          >
+            Solicitar plantas <Flecha class="ml-1.5 size-[1em] align-[-0.125em]" />
+          </a>
+        </div>
+      </div>
+      <slot />
+    </section>
+  </main>
+  <Footer />
+</Base>

@@ -1,4 +1,5 @@
 ---
+import Flecha from './Flecha.astro';
 import { enlaces, navegacion, ruta } from '../config/site';
 import Logo from './Logo.astro';
 ---
@@ -32,9 +33,7 @@ import Logo from './Logo.astro';
       >
         <span class="hidden sm:inline">Solicita tus árboles</span>
         <span class="sm:hidden">Solicitar</span>
-        <span aria-hidden="true" class="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-          ↗
-        </span>
+        <Flecha class="size-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </a>
 
       <details class="group relative lg:hidden">

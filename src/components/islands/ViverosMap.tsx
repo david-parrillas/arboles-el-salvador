@@ -98,7 +98,7 @@ export default function ViverosMap({ viveros, seleccionado, onSeleccionar }: Pro
           symbol: {
             type: 'simple-marker',
             style: 'circle',
-            color: activo ? rosa : v.especies.length > 0 ? verde : '#9ca3af',
+            color: activo ? rosa : verde,
             size: activo ? 22 : 14,
             outline: { color: activo ? marino : '#ffffff', width: activo ? 3 : 1.5 },
           },

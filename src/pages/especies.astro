@@ -1,0 +1,22 @@
+---
+import SpeciesExplorer from '../components/islands/SpeciesExplorer';
+import PaginaInterna from '../layouts/PaginaInterna.astro';
+import { cargarResumenSeguro } from '../lib/portaldeb/build';
+
+const resumen = await cargarResumenSeguro();
+---
+
+<PaginaInterna
+  title="Catálogo de especies"
+  description="Especies maderables, frutales, ornamentales y nativas disponibles en los viveros del MARN, con su nombre común y científico."
+  eyebrow="Catálogo y taxonomía"
+  volverA="especies"
+>
+  <Fragment slot="titulo">
+    Especies <em class="font-serif font-normal tracking-normal text-verde">disponibles</em>
+  </Fragment>
+  <Fragment slot="texto">
+    Nombre común y nombre científico de cada especie que hoy tiene plantas en al menos un vivero del MARN.
+  </Fragment>
+  <SpeciesExplorer client:load inicial={resumen?.especies ?? null} />
+</PaginaInterna>

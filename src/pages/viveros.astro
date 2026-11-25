@@ -1,0 +1,24 @@
+---
+import ViverosExplorer from '../components/islands/ViverosExplorer';
+import PaginaInterna from '../layouts/PaginaInterna.astro';
+import { cargarResumenSeguro } from '../lib/portaldeb/build';
+
+const resumen = await cargarResumenSeguro();
+---
+
+<PaginaInterna
+  title="Viveros"
+  description="Mapa y direcciones de los viveros del MARN en áreas naturales protegidas de El Salvador."
+  eyebrow="Red de viveros"
+  volverA="viveros"
+  fondo="bg-verde-50"
+>
+  <Fragment slot="titulo">
+    Encuentra tu vivero <em class="font-serif font-normal tracking-normal text-verde">más cercano</em>
+  </Fragment>
+  <Fragment slot="texto">
+    Los viveros están en áreas naturales protegidas de todo el país. Ubica en el mapa el más cercano a ti y su
+    dirección.
+  </Fragment>
+  <ViverosExplorer client:load inicial={resumen?.viveros ?? null} />
+</PaginaInterna>

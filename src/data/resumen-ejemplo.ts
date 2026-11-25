@@ -27,6 +27,11 @@ const viveros: ResumenVivero[] = [
     nombre: 'Vivero Santa Tecla',
     direccion: 'Km 12 carretera al Puerto de La Libertad, Santa Tecla, La Libertad',
     coordenadas: [-89.2797, 13.6769],
+    ubicacion: {
+      departamento: { id: 5, nombre: 'La Libertad' },
+      municipio: { id: 17, nombre: 'La Libertad Sur' },
+      distrito: { id: 101, nombre: 'Santa Tecla' },
+    },
     especies: ['Bálsamo', 'Caoba', 'Cedro', 'Guachipilín', 'Laurel', 'Madrecacao', 'Maquilishuat'],
   },
   {
@@ -34,6 +39,11 @@ const viveros: ResumenVivero[] = [
     nombre: 'Vivero San Andrés',
     direccion: 'Valle de San Andrés, Ciudad Arce, La Libertad',
     coordenadas: [-89.4072, 13.8086],
+    ubicacion: {
+      departamento: { id: 5, nombre: 'La Libertad' },
+      municipio: { id: 16, nombre: 'La Libertad Oeste' },
+      distrito: { id: 102, nombre: 'Ciudad Arce' },
+    },
     especies: ['Ceiba', 'Conacaste', 'Copinol', 'Madrecacao', 'Maquilishuat', 'Morro'],
   },
   {
@@ -41,6 +51,11 @@ const viveros: ResumenVivero[] = [
     nombre: 'Vivero Montecristo',
     direccion: 'Metapán, Santa Ana',
     coordenadas: [-89.4333, 14.3167],
+    ubicacion: {
+      departamento: { id: 2, nombre: 'Santa Ana' },
+      municipio: { id: 4, nombre: 'Santa Ana Norte' },
+      distrito: { id: 103, nombre: 'Metapán' },
+    },
     especies: ['Cedro', 'Guachipilín', 'Pino ocote'],
   },
   {
@@ -48,6 +63,11 @@ const viveros: ResumenVivero[] = [
     nombre: 'Vivero Bahía de Jiquilisco',
     direccion: 'Puerto El Triunfo, Usulután',
     coordenadas: [-88.55, 13.2833],
+    ubicacion: {
+      departamento: { id: 11, nombre: 'Usulután' },
+      municipio: { id: 36, nombre: 'Usulután Oeste' },
+      distrito: { id: 104, nombre: 'Puerto El Triunfo' },
+    },
     especies: ['Mangle rojo', 'Morro'],
   },
   {
@@ -55,6 +75,11 @@ const viveros: ResumenVivero[] = [
     nombre: 'Vivero San Miguel',
     direccion: null,
     coordenadas: [-88.1833, 13.4833],
+    ubicacion: {
+      departamento: { id: 12, nombre: 'San Miguel' },
+      municipio: { id: 39, nombre: 'San Miguel Centro' },
+      distrito: { id: 105, nombre: 'San Miguel' },
+    },
     especies: ['Caoba', 'Conacaste', 'Laurel', 'Maquilishuat'],
   },
 ];

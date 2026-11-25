@@ -1,4 +1,5 @@
 ---
+import Flecha from './Flecha.astro';
 import { enlaces, navegacion } from '../config/site';
 import Logo from './Logo.astro';
 
@@ -22,7 +23,7 @@ const anio = new Date().getFullYear();
           </a>
         ))}
         <a href={enlaces.solicitudArboles} class="font-semibold text-lima">
-          Solicita tus árboles ↗
+          Solicita tus árboles <Flecha class="ml-1.5 size-[1em] align-[-0.125em]" />
         </a>
       </nav>
     </div>

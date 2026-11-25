@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const territorio = z.object({ id: z.number(), nombre: z.string() });
+
 // Solo se declaran los campos que usa el sitio: zod descarta el resto,
 // así una columna nueva en el modelo del Portal nunca llega a la página.
 
@@ -21,6 +23,11 @@ export const resumenSchema = z.object({
       nombre: z.string(),
       direccion: z.string().nullable(),
       coordenadas: z.tuple([z.number(), z.number()]).nullable(),
+      // División territorial 2024. Opcional hasta que el Portal la envíe en todos los entornos.
+      ubicacion: z
+        .object({ departamento: territorio, municipio: territorio, distrito: territorio })
+        .nullish()
+        .transform((u) => u ?? null),
       especies: z.array(z.string()),
     }),
   ),

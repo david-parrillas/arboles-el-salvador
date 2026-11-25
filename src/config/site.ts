@@ -21,7 +21,7 @@ export const enlaces = {
 } as const;
 
 export const navegacion = [
-  { href: '#proyecto', label: 'El proyecto' },
-  { href: '#especies', label: 'Especies' },
-  { href: '#viveros', label: 'Viveros' },
+  { href: ruta('#proyecto'), label: 'El proyecto' },
+  { href: ruta('especies'), label: 'Especies' },
+  { href: ruta('viveros'), label: 'Viveros' },
 ] as const;

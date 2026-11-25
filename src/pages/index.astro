@@ -1,11 +1,12 @@
 ---
+import Flecha from '../components/Flecha.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import SpeciesExplorer from '../components/islands/SpeciesExplorer';
-import ViverosExplorer from '../components/islands/ViverosExplorer';
 import Hero from '../components/sections/Hero.astro';
 import MarqueeEspecies from '../components/sections/MarqueeEspecies.astro';
 import Proyecto from '../components/sections/Proyecto.astro';
+import Voluntariado from '../components/sections/Voluntariado.astro';
+import { enlaces, ruta } from '../config/site';
 import Base from '../layouts/Base.astro';
 import { cargarResumenSeguro } from '../lib/portaldeb/build';
 
@@ -30,41 +31,66 @@ const resumen = await cargarResumenSeguro();
 
     <section id="especies" class="bg-crema py-28" aria-labelledby="especies-titulo">
       <div class="mx-auto max-w-7xl px-4 sm:px-6">
-        <div class="mb-12 grid gap-6 lg:grid-cols-2 lg:items-end">
+        <div class="grid gap-6 lg:grid-cols-2 lg:items-end">
           <div>
-            <p class="eyebrow text-olivo">Catálogo en vivo</p>
+            <p class="eyebrow text-olivo">Solicitud de plantas</p>
             <h2 id="especies-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
               ¿Qué quieres <em class="font-serif font-normal tracking-normal text-verde">sembrar?</em>
             </h2>
           </div>
           <p class="text-lg text-marino/70">
-            Maderables, frutales y especies nativas que hoy tienen plantas listas en al menos un vivero del MARN. No es
-            la lista de todas las especies del país: cambia según lo que producen los viveros y se actualiza
-            constantemente.
+            El inventario de especies maderables, frutales, ornamentales y nativas disponibles actualmente en los
+            viveros del MARN, el cual representa una selección sujeta a la capacidad productiva existente en cada vivero
+            y no a la diversidad total del país.
           </p>
         </div>
-        <SpeciesExplorer client:visible inicial={resumen?.especies ?? null} />
+
+        <div class="mt-12 flex flex-col items-start justify-between gap-6 rounded-[2rem] bg-verde p-8 text-white md:flex-row md:items-center md:p-10">
+          <p class="titulo text-3xl md:text-4xl">
+            Solicita tus plantas <span class="text-lima">sin costo</span> llenando el formulario en línea.
+          </p>
+          <div class="flex shrink-0 flex-wrap gap-3">
+            <a
+              href={enlaces.solicitudArboles}
+              class="rounded-full bg-lima px-7 py-4 font-bold text-marino transition hover:bg-lima-300"
+            >
+              Solicitar plantas <Flecha class="ml-1.5 size-[1em] align-[-0.125em]" />
+            </a>
+            <a
+              href={ruta('especies')}
+              class="rounded-full border-2 border-white/40 px-7 py-4 font-semibold transition hover:border-white"
+            >
+              Ver catálogo de especies
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
     <section id="viveros" class="bg-verde-50 py-28" aria-labelledby="viveros-titulo">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6">
-        <div class="mb-12 grid gap-6 lg:grid-cols-2 lg:items-end">
-          <div>
-            <p class="eyebrow text-olivo">Red de viveros</p>
-            <h2 id="viveros-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
-              Encuentra tu vivero <em class="font-serif font-normal tracking-normal text-verde">más cercano</em>
-            </h2>
-          </div>
-          <p class="text-lg text-marino/70">
-            Los viveros están en áreas naturales protegidas de todo el país. Selecciona uno para ver qué especies tiene
-            disponibles.
-          </p>
+      <div class="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-2 lg:items-end">
+        <div>
+          <p class="eyebrow text-olivo">Red de viveros</p>
+          <h2 id="viveros-titulo" class="titulo mt-4 text-[clamp(3rem,7vw,6rem)]">
+            Encuentra tu vivero <em class="font-serif font-normal tracking-normal text-verde">más cercano</em>
+          </h2>
         </div>
-        <ViverosExplorer client:visible inicial={resumen?.viveros ?? null} />
+        <div>
+          <p class="text-lg text-marino/70">
+            Los viveros están en áreas naturales protegidas de todo el país. Ubica en el mapa el más cercano a ti y su
+            dirección.
+          </p>
+          <a
+            href={ruta('viveros')}
+            class="mt-6 inline-flex rounded-full bg-olivo px-7 py-4 font-bold text-white transition hover:bg-verde"
+          >
+            Ver mapa de viveros
+          </a>
+        </div>
       </div>
     </section>
 
+    <Voluntariado />
   </main>
   <Footer />
 </Base>
