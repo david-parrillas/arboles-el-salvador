@@ -24,14 +24,17 @@ ARG PORTALDEB_URL=https://portaldeb.marn.gob.sv
 ARG SITE_URL
 ARG PUBLIC_PROTOTIPO
 ENV PORTALDEB_URL=${PORTALDEB_URL} SITE_URL=${SITE_URL} PUBLIC_PROTOTIPO=${PUBLIC_PROTOTIPO}
+# El certificado del Portal lo firma la CA interna del MARN, que Node no trae: se agrega sin desactivar TLS.
+ENV NODE_EXTRA_CA_CERTS=/app/certs/marn-ca.pem
 RUN --mount=type=secret,id=portaldeb_token,required=true \
     PORTALDEB_TOKEN="$(cat /run/secrets/portaldeb_token)" pnpm build
 
 FROM node:${NODE_VERSION}-slim AS runtime
-ENV NODE_ENV=production HOST=0.0.0.0 PORT=8080
+ENV NODE_ENV=production HOST=0.0.0.0 PORT=8080 NODE_EXTRA_CA_CERTS=/app/certs/marn-ca.pem
 WORKDIR /app
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
+COPY certs ./certs
 COPY package.json ./
 USER node
 EXPOSE 8080
