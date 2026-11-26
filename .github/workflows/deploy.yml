@@ -1,0 +1,55 @@
+name: Publicar en GitHub Pages
+
+# Vista previa estática. Pages no ejecuta el proxy src/pages/api/*, así que las islas se quedan
+# con los datos de PortalDEB incrustados en el HTML al compilar (no se refrescan en el navegador).
+on:
+  push:
+    branches: [main]
+  # Recompila a diario para refrescar los datos de PortalDEB incluidos en el HTML (06:00 hora de El Salvador).
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PORTALDEB_URL: ${{ vars.PORTALDEB_URL || 'https://portaldeb.marn.gob.sv' }}
+      PORTALDEB_TOKEN: ${{ secrets.PORTALDEB_TOKEN }}
+      SITE_URL: https://${{ github.repository_owner }}.github.io
+      BASE_PATH: /${{ github.event.repository.name }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+        env:
+          # El certificado del Portal lo firma la CA interna del MARN, que Node no trae.
+          NODE_EXTRA_CA_CERTS: ${{ github.workspace }}/certs/marn-ca.pem
+      # Con el adaptador de Node, los archivos estáticos quedan en dist/client.
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/client
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
