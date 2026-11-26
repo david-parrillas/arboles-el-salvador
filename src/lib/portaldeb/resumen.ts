@@ -1,9 +1,16 @@
 // GET /api/arboles/resumen: disponibilidad ya resumida y sin cantidades.
 
+/** Uso de la especie en el Portal: Forestal, Frutal u Otros usos. */
+export interface UsoEspecie {
+  id: number;
+  nombre: string;
+}
+
 export interface ResumenEspecie {
   id: number;
   nombreComun: string;
   nombreCientifico: string | null;
+  uso: UsoEspecie | null;
   /** En cuántos viveros está disponible (0 = sin existencias por ahora). */
   viveros: number;
 }

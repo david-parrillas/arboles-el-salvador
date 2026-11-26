@@ -14,6 +14,11 @@ export const resumenSchema = z.object({
       id: z.number(),
       nombreComun: z.string(),
       nombreCientifico: z.string().nullable(),
+      // Opcional hasta que el Portal lo envíe en todos los entornos.
+      uso: z
+        .object({ id: z.number(), nombre: z.string() })
+        .nullish()
+        .transform((u) => u ?? null),
       viveros: z.number(),
     }),
   ),

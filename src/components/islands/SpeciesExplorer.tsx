@@ -1,11 +1,20 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useDeferredValue, useMemo, useState } from 'react';
 import { useResumen, withQuery } from '../../lib/portaldeb/queries';
-import type { ResumenEspecie } from '../../lib/portaldeb/resumen';
+import type { ResumenEspecie, UsoEspecie } from '../../lib/portaldeb/resumen';
 import { normalizar, numero } from '../../lib/texto';
 
 const POR_PAGINA = 12;
-const acentos = ['bg-verde', 'bg-rosa-400', 'bg-pasto'];
+
+// Color del punto según el uso de la especie en el Portal (se compara por nombre: los id cambian entre entornos).
+const usos = [
+  { clave: 'forestal', etiqueta: 'Forestal', color: 'bg-verde' },
+  { clave: 'frutal', etiqueta: 'Frutal', color: 'bg-rosa-400' },
+  { clave: 'otros usos', etiqueta: 'Otros usos', color: 'bg-pasto' },
+];
+
+const colorDeUso = (uso: UsoEspecie | null) =>
+  usos.find((u) => u.clave === normalizar(uso?.nombre ?? ''))?.color ?? 'bg-pasto';
 
 interface Props {
   inicial: ResumenEspecie[] | null;
@@ -19,6 +28,8 @@ function SpeciesExplorer({ inicial }: Props) {
   const termino = useDeferredValue(normalizar(busqueda.trim()));
 
   const especies = datos ?? [];
+  // Mientras el Portal no envíe el uso, no se muestran ni la leyenda ni los puntos.
+  const conUso = especies.some((e) => e.uso);
 
   const filtradas = useMemo(
     () =>
@@ -73,15 +84,27 @@ function SpeciesExplorer({ inicial }: Props) {
         </button>
       </div>
 
-      <p className="mt-4 text-sm text-marino/60" aria-live="polite">
-        {numero.format(filtradas.length)}{' '}
-        {soloDisponibles ? 'especies disponibles hoy en viveros' : 'especies en el catálogo'}{' '}
-        {cargando && '· actualizando catálogo…'}
-      </p>
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm text-marino/60">
+        <p aria-live="polite">
+          {numero.format(filtradas.length)}{' '}
+          {soloDisponibles ? 'especies disponibles hoy en viveros' : 'especies en el catálogo'}{' '}
+          {cargando && '· actualizando catálogo…'}
+        </p>
+        {conUso && (
+          <ul className="flex flex-wrap gap-x-4 gap-y-1" aria-label="Uso de la especie">
+            {usos.map((u) => (
+              <li key={u.clave} className="flex items-center gap-1.5">
+                <span aria-hidden="true" className={`size-2.5 rounded-full ${u.color}`} />
+                {u.etiqueta}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
       <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <AnimatePresence initial={false} mode="popLayout">
-          {filtradas.slice(0, limite).map((e, i) => (
+          {filtradas.slice(0, limite).map((e) => (
             <motion.li
               key={e.id}
               layout
@@ -91,7 +114,12 @@ function SpeciesExplorer({ inicial }: Props) {
               transition={{ duration: 0.3 }}
               className="flex flex-col rounded-[1.75rem] bg-white p-6 ring-1 ring-marino/10"
             >
-              <span aria-hidden="true" className={`mb-4 size-3 rounded-full ${acentos[i % acentos.length]}`} />
+              {e.uso && (
+                <p className="mb-4 flex items-center gap-2 text-xs font-semibold tracking-wide text-marino/60 uppercase">
+                  <span aria-hidden="true" className={`size-3 rounded-full ${colorDeUso(e.uso)}`} />
+                  {e.uso.nombre}
+                </p>
+              )}
               <h3 className="text-xl leading-tight font-bold text-balance text-marino">{e.nombreComun}</h3>
               {e.nombreCientifico && (
                 <p className="mt-1 font-serif text-lg text-marino/60 italic">{e.nombreCientifico}</p>
